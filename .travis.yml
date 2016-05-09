@@ -1,0 +1,32 @@
+language: java
+
+branches:
+  only:
+    - master
+    - /^v[0-9]+\.[0-9]+$/
+
+before_deploy:
+  - mvn package
+  - export APP_RELEASE_FILE=$(find rbs-test-app/target -regex 'rbs-test-app-[0-9]\.[0-9]\.jar')
+  - export APP_SOURCES_FILE=$(find rbs-test-app/target -regex '.*[0-9]\.[0-9]-sources\.jar')
+  - export APP_JAVADOC_FILE=$(find rbs-test-app/target -regex '.*[0-9]\.[0-9]-javadoc\.jar')
+  - export LIB_RELEASE_FILE=$(find rbs-test-app/target -regex 'rbs-test-app-[0-9]\.[0-9]\.jar')
+  - export LIB_SOURCES_FILE=$(find rbs-test-app/target -regex '.*[0-9]\.[0-9]-sources\.jar')
+  - export LIB_JAVADOC_FILE=$(find rbs-test-app/target -regex '.*[0-9]\.[0-9]-javadoc\.jar')
+
+deploy:
+  provider: releases
+  api_key:
+    secure: fbKE97O/fvB37SGgQMhJZeAbvw5A2Hmy306TUTmD/jSnB/tmmMk6rr0MoitDwNy8S9RwkiG0Mm5aRHhyqEb5VdypV6hblrZvUTtr+7tGSH3xlB2GGKaxkeSvAZnfENeqagLli21w1U5+M3Kq66eToCGr4tO74BooleJqHcURRqb/F1z93J45M5qdW2wB0Qv53Fp83BtOcDHJ6w5C29Eik5T6azJ5P36MdXesbN9vqNksk8DmCINhVWZarDkL0174A4felRFuuvgfaN6YRmvpFbECcV0+WyLZC3T8laDV6KHvf1mA16mHM3/H9Tro32rGpsvwkG4ubedUjr1nJ+RneADxxhTy8X3Fmyf6AUtISxgNix+HjzDVIEK15+f8vxCEgKMNqf3jMIJlj0ZC2iYFKx+cTklGhUYtxWuaeQBzbcgOHRHxasAzg/o7CsKYCm8XGwfYKklnn4ugC5I2KMzOvLOAjVLtYldvPSO8ot3Lt1UQMIDFO4cb+AEajnkCYPzENm3hH4rJzJg+La1rsrUwJ6/G0o9S6G8GZIf635/qHkzaAse9Mrc1Y6kwUr5Jq4nymJjjvcdAVAdpuRoSCZSbBb9BdfiFdUFs4Jjh3QGBzsu2a1s3k0vcTCq+W3Cjz+r92LY36+GCJrq2UHDmC7qhIYJ8UWy+3lteSuE9bPYYT4M=
+  file:
+    - "${APP_RELEASE_FILE}"
+    - "${APP_SOURCES_FILE}"
+    - "${APP_JAVADOC_FILE}"
+    - "${LIB_RELEASE_FILE}"
+    - "${LIB_SOURCES_FILE}"
+    - "${LIB_JAVADOC_FILE}"
+  skip_cleanup: true
+  on:
+    repo: lukaswerner/RoleBasedSecurity
+    tags: true
+    all_branches: true
