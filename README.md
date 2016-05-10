@@ -11,7 +11,7 @@ Besides the library there is also a test application as a reference
 implementation of the role concept. This is a [Spring Boot](http://projects.spring.io/spring-boot/) application with an
 embedded [H2 database](http://www.h2database.com/html/main.html). You can start this application out-of-the-box.
 
-The whole concept builds on [Spring Security](http://projects.spring.io/spring-security/)
+The whole concept builds on [Spring Security](http://projects.spring.io/spring-security/).
 
 ## Dependencies
 You just need [Maven](http://maven.apache.org/) to build the project.
