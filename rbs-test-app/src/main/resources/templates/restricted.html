@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>RoleBasedSecurity</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+    </head>
+    <body>
+        <div th:replace="fragments/header :: nav"></div>
+
+        <div class="container">
+            <h1>Restricted area</h1>
+            <p th:inline="text">Hallo, [[${#httpServletRequest.remoteUser}]]</p>
+
+            <p><a class="btn btn-default" href="/login?logout">Logout</a></p>
+
+            <div th:replace="fragments/footer :: footer"></div>
+        </div>
+
+        <script type="text/javascript" src="/js/jquery-1.11.2.min.js"></script>
+        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/main.js"></script>
+    </body>
+</html>
