@@ -13,7 +13,9 @@
             <h1>Restricted area</h1>
             <p th:inline="text">Hallo, [[${#httpServletRequest.remoteUser}]]</p>
 
-            <p><a class="btn btn-default" href="/login?logout">Logout</a></p>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" class="btn btn-default" value="Logout"/>
+            </form>
 
             <div th:replace="fragments/footer :: footer"></div>
         </div>
