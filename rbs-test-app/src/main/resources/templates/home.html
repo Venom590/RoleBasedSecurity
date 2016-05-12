@@ -11,9 +11,9 @@
 
         <div class="jumbotron">
             <div class="container">
-                <h1>Willkommen!</h1>
-                <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-                <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+                <h1>Hello, <span th:text="${name}"></span>!</h1>
+                <p>This is a test application for the implementation of a role-based security system in Spring Security.</p>
+                <p><a class="btn btn-primary btn-lg" href="https://github.com/lukaswerner/RoleBasedSecurity.git" role="button">@GitHub &raquo;</a></p>
             </div>
         </div>
 
@@ -22,23 +22,22 @@
             <div class="row">
                 <div class="col-md-4">
                     <h2>Hierarchical roles</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
-                        mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna
-                        mollis euismod. Donec sed odio dui. </p>
+                    <p>The roles, which are manageable through this web app represent the core of the role-based
+                        security system.</p>
                     <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
                 </div>
                 <div class="col-md-4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
-                        mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna
-                        mollis euismod. Donec sed odio dui. </p>
+                    <h2>Users</h2>
+                    <p>Users in this app are the users just as you know it. They have user names, passwords and names.
+                        They can be associated with roles. Roles can have certain rights (read, write, delete) on
+                        objects. Further on you can sign in by entering your credentials on the corresponding page.</p>
                     <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
                 </div>
                 <div class="col-md-4">
-                    <h2>Heading</h2>
-                    <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula
-                        porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
-                        ut fermentum massa justo sit amet risus.</p>
+                    <h2>Objects</h2>
+                    <p>Objects are simple abstract entities, which you can create, show, edit and delete. These are simple
+                        database entries with associated roles and the proper rights. So if you are in a role which has
+                        the proper rights (read, write, delete), you can perform certain actions.</p>
                     <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
                 </div>
             </div>
