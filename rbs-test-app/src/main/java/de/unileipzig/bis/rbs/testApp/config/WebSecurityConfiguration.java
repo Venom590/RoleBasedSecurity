@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import javax.sql.DataSource;
+
 /**
  * Simple security configuration for the login app
  *
@@ -16,11 +18,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private DataSource dataSource;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
                 .antMatchers("/", "/css/**", "/fonts/**", "/js/**").permitAll()
+                .antMatchers("/user/**").access("hasAuthority('admin')")
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
@@ -28,10 +34,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
             .logout()
-                .permitAll();
+                .logoutUrl("/logout")
+                .permitAll()
+                .and()
+            .exceptionHandling()
+                .accessDeniedPage("/403");
 
-        http.csrf().disable(); // TODO not secure!
-        http.headers().frameOptions().disable(); // TODO not secure!
+        http.csrf().disable();
     }
 
     /**
@@ -43,14 +52,26 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
-            .inMemoryAuthentication()
-            .withUser("testuser")
-                .password("test")
-                .roles("USER")
-                .and()
-            .withUser("admin")
-                .password("admin")
-                .roles("ADMIN");
+                .jdbcAuthentication()
+                .dataSource(dataSource)
+                .usersByUsernameQuery(getUserQuery())
+                .authoritiesByUsernameQuery(getAuthorityQuery());
+    }
+
+    private String getUserQuery() {
+        return "SELECT username, password, true " +
+                "FROM rbs_users " +
+                "WHERE username = ?";
+    }
+
+    private String getAuthorityQuery() {
+        return "SELECT U.username, R.name AS authority " +
+                "FROM rbs_users U " +
+                "INNER JOIN rbs_users_roles UR " +
+                "ON U.id = UR.user_id " +
+                "INNER JOIN rbs_roles R " +
+                "ON UR.role_id = R.id " +
+                "WHERE U.username = ?";
     }
 
 }

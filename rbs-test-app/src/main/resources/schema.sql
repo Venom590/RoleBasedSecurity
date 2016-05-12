@@ -31,9 +31,9 @@ CREATE TABLE rbs_users_roles (
 CREATE TABLE rbs_roles_objects (
   role_id INT NOT NULL,
   object_id INT NOT NULL,
-  can_read INT NOT NULL,
-  can_write INT NOT NULL,
-  can_delete INT NOT NULL,
+  can_read BOOLEAN NOT NULL,
+  can_write BOOLEAN NOT NULL,
+  can_delete BOOLEAN NOT NULL,
   PRIMARY KEY (role_id, object_id),
   FOREIGN KEY (role_id) REFERENCES rbs_roles(id) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (role_id) REFERENCES rbs_objects(id) ON DELETE CASCADE ON UPDATE CASCADE
