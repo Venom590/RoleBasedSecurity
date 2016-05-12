@@ -10,21 +10,21 @@
         <div th:replace="fragments/header :: nav"></div>
 
         <div class="container">
-            <h1>Create user</h1>
-            <form th:action="@{/user/edit}" method="post">
+            <h1>Edit user <span th:text="${user.id}">&nbsp;</span></h1>
+            <form th:action="@{/user/edit/{userId}(userId = ${user.id})}" method="post">
                 <div class="form-group">
                     <label for="usernameinput">User name</label>
-                    <input name="username" type="text" class="form-control" id="usernameinput" placeholder="User name" />
+                    <input name="username" type="text" class="form-control" id="usernameinput" placeholder="User name" th:value="${user.username}" />
                 </div>
                 <div class="form-group">
                     <label for="passwordinput">Password</label>
-                    <input name="password" type="password" class="form-control" id="passwordinput" placeholder="Password" />
+                    <input name="password" type="password" class="form-control" id="passwordinput" placeholder="Password" th:value="${user.password}" />
                 </div>
                 <div class="form-group">
                     <label for="nameinput">Name</label>
-                    <input name="name" type="text" class="form-control" id="nameinput" placeholder="Name" />
+                    <input name="name" type="text" class="form-control" id="nameinput" placeholder="Name" th:value="${user.name}" />
                 </div>
-                <button type="submit" class="btn btn-default">Create user</button>
+                <button type="submit" class="btn btn-default">Edit user</button>
             </form>
             <p>&nbsp;</p>
             <p><a href="#" th:href="@{/user}" class="btn btn-default">Back to all users</a></p>

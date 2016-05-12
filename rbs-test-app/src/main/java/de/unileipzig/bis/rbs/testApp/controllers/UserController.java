@@ -43,6 +43,26 @@ public class UserController {
         return "redirect:/user";
     }
 
+    @RequestMapping(value = "/user/edit/{userid}", method = RequestMethod.GET)
+    public String edit(@PathVariable String userid, Model model) {
+        User user = userRepository.findOne(Long.valueOf(userid));
+        model.addAttribute("user", user);
+        return "user/edit";
+    }
+
+    @RequestMapping(value = "/user/edit/{userid}", method = RequestMethod.POST)
+    public String doEdit(@PathVariable String userid,
+                         @RequestParam(value = "username") String username,
+                         @RequestParam(value = "password") String password,
+                         @RequestParam(value = "name", required = false) String name) {
+        User user = userRepository.findOne(Long.valueOf(userid));
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setName(name);
+        userRepository.save(user);
+        return "redirect:/user/" + userid;
+    }
+
     @RequestMapping(value = "/user/delete/{userid}", method = RequestMethod.GET)
     public String delete(@PathVariable String userid) {
         userRepository.delete(Long.valueOf(userid));
