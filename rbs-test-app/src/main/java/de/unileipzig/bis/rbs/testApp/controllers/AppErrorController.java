@@ -4,10 +4,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+/**
+ * Simple error controller
+ *
+ * @author Lukas Werner
+ */
 @Controller
-public class ErrorController {
+@RequestMapping("/error")
+public class AppErrorController {
 
-    @RequestMapping(value = "403", method = RequestMethod.GET)
+    /**
+     * Handling the access denied error
+     *
+     * @return the view
+     */
+    @RequestMapping(value = "/403", method = RequestMethod.GET)
     public String accessDenied() {
         return "error/403";
     }

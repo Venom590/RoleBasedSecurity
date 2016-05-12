@@ -26,7 +26,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/", "/css/**", "/fonts/**", "/js/**").permitAll()
-                .antMatchers("/user/**").access("hasAuthority('admin')")
+                .antMatchers("/manage/**").access("hasAuthority('admin')")
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
@@ -38,7 +38,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
             .exceptionHandling()
-                .accessDeniedPage("/403");
+                .accessDeniedPage("/error/403");
 
         http.csrf().disable();
     }

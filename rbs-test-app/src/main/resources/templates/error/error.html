@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>RoleBasedSecurity</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+    </head>
+    <body>
+        <div th:replace="fragments/header :: nav"></div>
+
+        <div class="container">
+            <h1>Oh no, ... Error!</h1>
+            <p>Well, I could say, this was on purpose, but I don't think, you'd beleave me.
+                The reason is currently unknown. It could be, that the function, you was trying
+                to access, wasn't implemented yet. So maybe it could be a good idea to come here
+                later again.</p>
+
+            <div th:replace="fragments/footer :: footer"></div>
+        </div>
+
+        <script type="text/javascript" src="/js/jquery-1.11.2.min.js"></script>
+        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/main.js"></script>
+    </body>
+</html>
