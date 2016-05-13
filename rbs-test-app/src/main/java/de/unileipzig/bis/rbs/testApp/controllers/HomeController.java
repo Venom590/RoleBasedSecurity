@@ -3,8 +3,6 @@ package de.unileipzig.bis.rbs.testApp.controllers;
 import de.unileipzig.bis.rbs.testApp.model.User;
 import de.unileipzig.bis.rbs.testApp.service.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Lukas Werner
  */
 @Controller
-public class HomeController {
+public class HomeController extends AbstractController{
 
     @Autowired
     private UserRepository userRepository;
@@ -27,8 +25,7 @@ public class HomeController {
      */
     @RequestMapping("/")
     public String home(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
+        String username = this.getAuthentication().getName();
         User user = userRepository.findByUsername(username);
         String name = "Guest";
         if (user != null) {

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 @RequestMapping("/error")
-public class AppErrorController {
+public class AppErrorController extends AbstractController{
 
     /**
      * Handling the access denied error

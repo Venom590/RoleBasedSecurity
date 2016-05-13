@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Stephan Kemper
  */
 @Controller
-public class LoginController {
+public class LoginController extends AbstractController{
 
     /**
      * Login route
