@@ -10,12 +10,11 @@
         <div th:replace="fragments/header :: nav"></div>
 
         <div class="container">
-            <h1>Oh no, ... Error!</h1>
+            <h1>Oh no, ... SQL-Error!</h1>
             <p>Well, I could say, this was on purpose, but I don't think, you'd beleave me.
-                The reason is currently unknown. It could be, that the function, you was trying
-                to access, wasn't implemented yet. So maybe it could be a good idea to come here
-                later again. This may help:</p>
+                It has something to do with the database. This may help:</p>
             <p><span th:text="${error}"></span></p>
+
 
             <div th:replace="fragments/footer :: footer"></div>
         </div>
