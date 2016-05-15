@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>RoleBasedSecurity</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+    </head>
+    <body>
+        <div th:replace="fragments/header :: nav"></div>
+
+        <div class="container">
+            <h1>All Roles</h1>
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>parentid</th>
+                        <th>name</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="role : ${roles}">
+                        <td>
+                            <a href="#" th:href="@{/manage/role/{roleId}(roleId=${role.id})}" th:text="${role.id}">&nbsp;</a>
+                        </td>
+                        <td>
+                            <a href="#" th:href="@{/manage/role/{roleId}(roleId=${role.id})}" th:text="${role.getParentId()}">&nbsp;</a>
+                        </td>
+                        <td>
+                            <a href="#" th:href="@{/manage/role/{roleId}(roleId=${role.id})}" th:text="${role.name}">&nbsp;</a>
+                        </td>
+                        <td class="text-right">
+                            <!-- TODO Embedded JS doesn't work -->
+                            <a href="#" th:href="@{/manage/role/edit/{roleId}(roleId=${role.id})}" class="btn btn-warning">
+                                <span class="glyphicon glyphicon-pencil"></span> Edit
+                            </a>
+                            <a href="#" th:href="@{/manage/role/delete/{roleId}(roleId=${role.id})}" class="btn btn-danger" th:onclick="'return confirm(\'Are you sure, you want to delete this record?\');'">
+                                <span class="glyphicon glyphicon-remove"></span> Delete
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><a href="#" th:href="@{/manage/role/create}" class="btn btn-default">Create new role</a></p>
+
+            <div th:replace="fragments/footer :: footer"></div>
+        </div>
+
+        <script type="text/javascript" src="/js/jquery-1.11.2.min.js"></script>
+        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/main.js"></script>
+    </body>
+</html>
