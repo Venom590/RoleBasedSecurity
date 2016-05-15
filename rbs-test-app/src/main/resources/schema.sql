@@ -38,3 +38,6 @@ CREATE TABLE rbs_roles_objects (
   FOREIGN KEY (role_id) REFERENCES rbs_roles(id) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (role_id) REFERENCES rbs_objects(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+ALTER TABLE rbs_roles
+ADD CONSTRAINT chk_role CHECK (parent_id <> id)
