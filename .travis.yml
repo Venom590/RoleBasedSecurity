@@ -10,12 +10,9 @@ branches:
 
 before_deploy:
   - mvn package
-  - export APP_RELEASE_FILE=$(find rbs-test-app/target -regex 'rbs-test-app-[0-9]\.[0-9]\.jar')
+  - export APP_RELEASE_FILE=$(find rbs-test-app/target -regex 'rbs-test-app-[0-9]+\.[0-9]+\.jar')
   - export APP_SOURCES_FILE=$(find rbs-test-app/target -regex '.*[0-9]\.[0-9]-sources\.jar')
   - export APP_JAVADOC_FILE=$(find rbs-test-app/target -regex '.*[0-9]\.[0-9]-javadoc\.jar')
-  - export LIB_RELEASE_FILE=$(find rbs-test-app/target -regex 'rbs-test-app-[0-9]\.[0-9]\.jar')
-  - export LIB_SOURCES_FILE=$(find rbs-test-app/target -regex '.*[0-9]\.[0-9]-sources\.jar')
-  - export LIB_JAVADOC_FILE=$(find rbs-test-app/target -regex '.*[0-9]\.[0-9]-javadoc\.jar')
 
 deploy:
   provider: releases
@@ -25,9 +22,6 @@ deploy:
     - "${APP_RELEASE_FILE}"
     - "${APP_SOURCES_FILE}"
     - "${APP_JAVADOC_FILE}"
-    - "${LIB_RELEASE_FILE}"
-    - "${LIB_SOURCES_FILE}"
-    - "${LIB_JAVADOC_FILE}"
   skip_cleanup: true
   on:
     repo: lukaswerner/RoleBasedSecurity
