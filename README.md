@@ -1,6 +1,6 @@
 # RoleBasedSecurity
 
-[![Build Status](https://travis-ci.org/lukaswerner/RoleBasedSecurity.svg?branch=v0.1)](https://travis-ci.org/lukaswerner/RoleBasedSecurity)
+[![Build Status](https://travis-ci.org/lukaswerner/RoleBasedSecurity.svg?branch=v0.2)](https://travis-ci.org/lukaswerner/RoleBasedSecurity)
 
 This is a library for [spring](https://spring.io/sp) applications to provide role based security.
 
