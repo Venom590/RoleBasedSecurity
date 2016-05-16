@@ -4,7 +4,7 @@
 
     <groupId>de.unileipzig.bis</groupId>
     <artifactId>rbs-test-app</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
     <packaging>jar</packaging>
 
     <name>TestApp</name>
@@ -13,7 +13,7 @@
     <parent>
         <groupId>de.unileipzig.bis</groupId>
         <artifactId>role-based-security</artifactId>
-        <version>0.1</version>
+        <version>0.2</version>
     </parent>
 
     <properties>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>de.unileipzig.bis</groupId>
             <artifactId>rbs-lib</artifactId>
-            <version>0.1</version>
+            <version>0.2</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
