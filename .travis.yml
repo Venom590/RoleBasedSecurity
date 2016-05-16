@@ -9,10 +9,11 @@ branches:
     - /v[0-9]+\.[0-9]+-release$/
 
 before_deploy:
-  - mvn package
-  - export APP_RELEASE_FILE=$(find rbs-test-app/target -regex 'rbs-test-app-[0-9]+\.[0-9]+\.jar')
-  - export APP_SOURCES_FILE=$(find rbs-test-app/target -regex '.*[0-9]\.[0-9]-sources\.jar')
-  - export APP_JAVADOC_FILE=$(find rbs-test-app/target -regex '.*[0-9]\.[0-9]-javadoc\.jar')
+  - mvn clean package -DskipTests
+  - ls rbs-test-app/target
+  - export APP_RELEASE_FILE=$(find rbs-test-app/target -regex '.*/rbs-test-app-[0-9]+\.[0-9]+\.jar')
+  - export APP_SOURCES_FILE=$(find rbs-test-app/target -regex '.*/.*[0-9]+\.[0-9]+-sources\.jar')
+  - export APP_JAVADOC_FILE=$(find rbs-test-app/target -regex '.*/.*[0-9]+\.[0-9]+-javadoc\.jar')
 
 deploy:
   provider: releases

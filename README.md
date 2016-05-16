@@ -34,6 +34,14 @@ the underlying data source to any persistant one.
 
 ## Release Notes
 
+### v0.2 (2016-05-17)
+- Created custom error page
+- Changed in-memory login to database login
+- Logout wasn't possible (fixed)
+- Beautified test app
+- Improved the database structure and test data
+- Made users, roles and objects manageable
+
 ### v0.1 (2016-05-03)
 - Created maven project
 - Created basic login app
