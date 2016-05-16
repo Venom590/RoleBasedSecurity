@@ -127,10 +127,8 @@ public class Role {
         this.parentRole = null;
     }
 
-
-
     @Override
     public String toString() {
-        return String.format("User [id=%d, parent_id=%s, name=%s]", id, parentRole.getId(), name);
+        return String.format("Role [id=%d, parent_id=%s, name=%s]", id, parentRole, name);
     }
 }

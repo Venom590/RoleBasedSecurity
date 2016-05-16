@@ -10,21 +10,24 @@
         <div th:replace="fragments/header :: nav"></div>
 
         <div class="container">
-            <h1>Roles</h1>
+            <h1>Role</h1>
             <div class="row">
                 <div class="col-md-2"><strong>id</strong></div>
                 <div class="col-md-10"><span th:text="${role.id}">&nbsp;</span></div>
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>parentid</strong></div>
-                <div class="col-md-10"><span th:text="${role.getParentId()}">&nbsp;</span></div>
+                <div class="col-md-2"><strong>parent role</strong></div>
+                <div class="col-md-10"><span th:text="${role.parentRole?.name}">&nbsp;</span></div>
             </div>
             <div class="row">
                 <div class="col-md-2"><strong>name</strong></div>
                 <div class="col-md-10"><span th:text="${role.name}">&nbsp;</span></div>
             </div>
             <p>&nbsp;</p>
-            <p><a href="#" th:href="@{/manage/role}" class="btn btn-default">All roles</a></p>
+            <p><a href="#" th:href="@{/manage/role}" class="btn btn-default">Back to all roles</a>
+                <a href="#" th:href="@{/manage/role/edit/{roleId}(roleId=${role.id})}" class="btn btn-warning">
+                    <span class="glyphicon glyphicon-pencil"></span> Edit role
+                </a></p>
 
             <div th:replace="fragments/footer :: footer"></div>
         </div>

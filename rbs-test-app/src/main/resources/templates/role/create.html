@@ -13,14 +13,17 @@
             <h1>Create role</h1>
             <form th:action="@{/manage/role/create}" method="post">
                 <div class="form-group">
-                    <label for="parentidinput">Parent id</label>
-                    <input name="parent_id" type="text" class="form-control" id="parentidinput" placeholder="Parent id" />
+                    <label for="parentidinput">Parent role</label>
+                    <select class="form-control" id="parentidinput" name="parent_id">
+                        <option value=""></option>
+                        <option th:each="role : ${roles}" th:text="${role.name}" th:value="${role.id}">&nbsp;</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="nameinput">Name</label>
                     <input name="name" type="text" class="form-control" id="nameinput" placeholder="Name" />
                 </div>
-                <button type="submit" class="btn btn-default">Create role</button>
+                <button type="submit" class="btn btn-success">Create role</button>
             </form>
             <p>&nbsp;</p>
             <p><a href="#" th:href="@{/manage/role}" class="btn btn-default">Back to all roles</a></p>

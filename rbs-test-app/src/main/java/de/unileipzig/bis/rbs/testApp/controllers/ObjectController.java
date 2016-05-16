@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 @RequestMapping("/manage/object")
-public class ObjectController extends AbstractController{
+public class ObjectController extends AbstractController {
 
     /**
      * The object repository to persist changes

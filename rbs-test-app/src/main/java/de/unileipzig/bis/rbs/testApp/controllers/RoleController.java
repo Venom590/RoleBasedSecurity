@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 @RequestMapping("/manage/role")
-public class RoleController extends AbstractController{
+public class RoleController extends AbstractController {
 
     /**
      * The role repository to persist changes
@@ -55,25 +55,32 @@ public class RoleController extends AbstractController{
     /**
      * Create new role (show mask)
      *
+     * @param model the ui model
      * @return the role creation mask
      */
     @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String create() {
+    public String create(Model model) {
+        Iterable<Role> allRoles = roleRepository.findAll();
+        model.addAttribute("roles", allRoles);
         return "role/create";
     }
 
     /**
      * Create new role (action)
      *
-     * @param parent_id the parent id
+     * @param parentId the parent id
      * @param name the name
      * @return the view (redirect)
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String doCreate(@RequestParam(value = "parent_id") Long parent_id,
+    public String doCreate(@RequestParam(value = "parent_id") Long parentId,
                            @RequestParam(value = "name", required = false) String name) {
-        Role parentRole = roleRepository.findOne(Long.valueOf(parent_id));
-        roleRepository.save(new Role(name, parentRole));
+        Role role = new Role();
+        role.setName(name);
+        if (parentId != null && parentId != 0) {
+            role.setParentRole(roleRepository.findOne(parentId));
+        }
+        roleRepository.save(role);
         return "redirect:/manage/role";
     }
 
@@ -88,6 +95,8 @@ public class RoleController extends AbstractController{
     public String edit(@PathVariable String roleid, Model model) {
         Role role = roleRepository.findOne(Long.valueOf(roleid));
         model.addAttribute("role", role);
+        Iterable<Role> allRoles = roleRepository.findAll();
+        model.addAttribute("roles", allRoles);
         return "role/edit";
     }
 
@@ -95,17 +104,21 @@ public class RoleController extends AbstractController{
      * Edit existing role (action)
      *
      * @param roleid the role id
-     * @param parent_id the new parent id
+     * @param parentId the new parent id
      * @param name the new name
      * @return the view (redirect)
      */
     @RequestMapping(value = "/edit/{roleid}", method = RequestMethod.POST)
     public String doEdit(@PathVariable String roleid,
-                         @RequestParam(value = "parent_id") Long parent_id,
-                         @RequestParam(value = "name", required = false) String name) {
+                         @RequestParam(value = "parent_id", required = false) Long parentId,
+                         @RequestParam(value = "name") String name) {
         Role role = roleRepository.findOne(Long.valueOf(roleid));
-        Role parentRole = roleRepository.findOne(Long.valueOf(parent_id));
-        role.setParentRole(parentRole);
+        if (parentId != null && parentId != 0) {
+            Role parentRole = roleRepository.findOne(parentId);
+            role.setParentRole(parentRole);
+        } else {
+            role.setParentRole(null);
+        }
         role.setName(name);
         roleRepository.save(role);
         return "redirect:/manage/role/" + roleid;

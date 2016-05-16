@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Lukas Werner
  */
 @Controller
-public class HomeController extends AbstractController{
+public class HomeController extends AbstractController {
 
     @Autowired
     private UserRepository userRepository;

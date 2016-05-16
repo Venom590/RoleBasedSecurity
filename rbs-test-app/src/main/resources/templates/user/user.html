@@ -28,7 +28,11 @@
                 <div class="col-md-10"><span th:text="${user.name}">&nbsp;</span></div>
             </div>
             <p>&nbsp;</p>
-            <p><a href="#" th:href="@{/manage/user}" class="btn btn-default">All users</a></p>
+            <p><a href="#" th:href="@{/manage/user}" class="btn btn-default">All users</a>
+                <a href="#" th:href="@{/manage/user/edit/{userId}(userId=${user.id})}" class="btn btn-warning">
+                    <span class="glyphicon glyphicon-pencil"></span> Edit user
+                </a>
+            </p>
 
             <div th:replace="fragments/footer :: footer"></div>
         </div>

@@ -20,7 +20,11 @@
                 <div class="col-md-10"><span th:text="${object.name}">&nbsp;</span></div>
             </div>
             <p>&nbsp;</p>
-            <p><a href="#" th:href="@{/manage/object}" class="btn btn-default">All objects</a></p>
+            <p><a href="#" th:href="@{/manage/object}" class="btn btn-default">All objects</a>
+                <a href="#" th:href="@{/manage/object/edit/{objectId}(objectId=${object.id})}" class="btn btn-warning">
+                    <span class="glyphicon glyphicon-pencil"></span> Edit object
+                </a>
+            </p>
 
             <div th:replace="fragments/footer :: footer"></div>
         </div>

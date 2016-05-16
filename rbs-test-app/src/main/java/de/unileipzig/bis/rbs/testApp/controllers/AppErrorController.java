@@ -1,6 +1,8 @@
 package de.unileipzig.bis.rbs.testApp.controllers;
 
+import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -10,17 +12,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author Lukas Werner
  */
 @Controller
-@RequestMapping("/error")
-public class AppErrorController extends AbstractController{
+public class AppErrorController extends AbstractController implements ErrorController {
+
+    @RequestMapping(value = "/error")
+    public String error() {
+        return "error/error";
+    }
 
     /**
      * Handling the access denied error
      *
      * @return the view
      */
-    @RequestMapping(value = "/403", method = RequestMethod.GET)
+    @RequestMapping(value = "error/403", method = RequestMethod.GET)
     public String accessDenied() {
         return "error/403";
     }
 
+    @Override
+    public String getErrorPath() {
+        return "/error";
+    }
 }

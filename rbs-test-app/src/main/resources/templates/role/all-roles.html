@@ -15,7 +15,7 @@
                 <thead>
                     <tr>
                         <th>id</th>
-                        <th>parentid</th>
+                        <th>parent role</th>
                         <th>name</th>
                         <th>&nbsp;</th>
                     </tr>
@@ -26,7 +26,7 @@
                             <a href="#" th:href="@{/manage/role/{roleId}(roleId=${role.id})}" th:text="${role.id}">&nbsp;</a>
                         </td>
                         <td>
-                            <a href="#" th:href="@{/manage/role/{roleId}(roleId=${role.id})}" th:text="${role.getParentId()}">&nbsp;</a>
+                            <a href="#" th:href="@{/manage/role/{roleId}(roleId=${role.parentRole?.id})}" th:text="${role.parentRole?.name}">&nbsp;</a>
                         </td>
                         <td>
                             <a href="#" th:href="@{/manage/role/{roleId}(roleId=${role.id})}" th:text="${role.name}">&nbsp;</a>

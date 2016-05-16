@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 @RequestMapping("/manage/user")
-public class UserController extends AbstractController{
+public class UserController extends AbstractController {
 
     /**
      * The user repository to persist changes
