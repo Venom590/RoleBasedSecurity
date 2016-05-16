@@ -41,6 +41,7 @@ the underlying data source to any persistant one.
 - Beautified test app
 - Improved the database structure and test data
 - Made users, roles and objects manageable
+- Fixed Travis CI and Deployment
 
 ### v0.1 (2016-05-03)
 - Created maven project
