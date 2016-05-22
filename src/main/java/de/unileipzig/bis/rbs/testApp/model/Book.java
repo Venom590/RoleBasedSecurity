@@ -7,11 +7,13 @@ import javax.persistence.*;
  */
 
 @Entity
+@DiscriminatorValue("de.unileipzig.bis.rbs.testApp.model.Book")
 @Table(name="rbs_books")
 @SecondaryTable(name="rbs_objects", pkJoinColumns={
-        @PrimaryKeyJoinColumn(name="table_object_id", referencedColumnName="id"),
-        @PrimaryKeyJoinColumn(name="table_name", referencedColumnName="'" + "de.unileipzig.bis.rbs.testApp.model.Book" + "'"),
+        @PrimaryKeyJoinColumn(name="table_object_id", referencedColumnName="id")//,
+        //@PrimaryKeyJoinColumn(name="table_name", referencedColumnName="'" + "de.unileipzig.bis.rbs.testApp.model.Book" + "'"),
 })
+
 public class Book extends Object{
 
     /**

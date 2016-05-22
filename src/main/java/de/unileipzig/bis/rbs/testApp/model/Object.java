@@ -8,6 +8,8 @@ import javax.persistence.*;
  * @author Stephan Kemper
  */
 @Entity
+@Inheritance(strategy=InheritanceType.JOINED)
+@DiscriminatorColumn(name="table_name")
 @Table(name="rbs_objects")
 public class Object {
 
@@ -16,13 +18,17 @@ public class Object {
      */
     @Id
     @GeneratedValue
+    @Column(name = "id")
     private Long id;
 
     /**
      * Object name
      */
-    @Column
-    private String name;
+    @Column(name = "table_object_id")
+    private Long tableObjectId;
+
+//    @Column(name = "table_name")
+//    private String tableName;
 
     /**
      * Empty constructor as required in JPA
@@ -32,10 +38,10 @@ public class Object {
     /**
      * Data constructor
      *
-     * @param name the name
+     * @param tableObjectId the name
      */
-    public Object(String name) {
-        this.name = name;
+    public Object(Long tableObjectId) {
+        this.tableObjectId = tableObjectId;
     }
 
     /**
@@ -45,22 +51,16 @@ public class Object {
         return id;
     }
 
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
+    public Long getTableObjectId() {
+        return tableObjectId;
     }
 
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
+    public void setTableObjectId(Long tableObjectId) {
+        this.tableObjectId = tableObjectId;
     }
 
     @Override
     public String toString() {
-        return String.format("Object [id=%d, name=%s]", id, name);
+        return String.format("Object [id=%d, tableObjectId=%s]", id, tableObjectId);
     }
 }

@@ -65,12 +65,12 @@ public class ObjectController extends AbstractController {
     /**
      * Create new object (action)
      *
-     * @param name the name
+     * @param tableObjectId the name
      * @return the view (redirect)
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String doCreate(@RequestParam(value = "name", required = false) String name) {
-        objectRepository.save(new Object(name));
+    public String doCreate(@RequestParam(value = "tableObjectId", required = false) Long tableObjectId) {
+        objectRepository.save(new Object(tableObjectId));
         return "redirect:/manage/object";
     }
 
@@ -92,14 +92,14 @@ public class ObjectController extends AbstractController {
      * Edit existing object (action)
      *
      * @param objectid the object id
-     * @param name the new name
+     * @param tableObjectId the new name
      * @return the view (redirect)
      */
     @RequestMapping(value = "/edit/{objectid}", method = RequestMethod.POST)
     public String doEdit(@PathVariable String objectid,
-                        @RequestParam(value = "name", required = false) String name) {
+                        @RequestParam(value = "tableObjectId") Long tableObjectId) {
         Object object = objectRepository.findOne(Long.valueOf(objectid));
-        object.setName(name);
+        object.setTableObjectId(tableObjectId);
         objectRepository.save(object);
         return "redirect:/manage/object/" + objectid;
     }

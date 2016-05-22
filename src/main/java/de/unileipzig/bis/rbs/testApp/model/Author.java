@@ -8,6 +8,8 @@ import java.util.Set;
  * Created by Stephan on 21.05.2016.
  */
 @Entity
+@DiscriminatorValue("de.unileipzig.bis.rbs.testApp.model.Author")
+@SecondaryTable(name="rbs_objects", pkJoinColumns={@PrimaryKeyJoinColumn(name="table_object_id", referencedColumnName="id")})
 @Table(name="rbs_authors")
 public class Author extends Object{
 
@@ -16,6 +18,7 @@ public class Author extends Object{
      */
     @Id
     @GeneratedValue
+    @Column(name = "id")
     private Long id;
 
     /**
@@ -28,7 +31,8 @@ public class Author extends Object{
      * Set of roles of children
      */
     @JoinColumn (name="author_id")
-    @OneToMany(mappedBy="author")
+//    @OneToMany(mappedBy="author")
+    @OneToMany()
     private Set<Book> books = new HashSet<Book>();
 
     /**

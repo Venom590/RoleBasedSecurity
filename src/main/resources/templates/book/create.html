@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>RoleBasedSecurity</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+    </head>
+    <body>
+        <div th:replace="fragments/header :: nav"></div>
+
+        <div class="container">
+            <h1>Create book</h1>
+            <form th:action="@{/manage/book/create}" method="post">
+                <div class="form-group">
+                    <label for="isbninput">Isbn</label>
+                    <input name="isbn" type="text" class="form-control" id="isbninput" placeholder="Isbn" />
+                </div>
+                <div class="form-group">
+                    <label for="titleinput">Title</label>
+                    <input name="title" type="text" class="form-control" id="titleinput" placeholder="Title" />
+                </div>
+                <div class="form-group">
+                    <label for="authoridinput">AuthorID</label>
+                    <input name="authorId" type="text" class="form-control" id="authoridinput" placeholder="AuthorID" />
+                </div>
+                <button type="submit" class="btn btn-success">Create book</button>
+            </form>
+            <p>&nbsp;</p>
+            <p><a href="#" th:href="@{/manage/book}" class="btn btn-default">Back to all books</a></p>
+
+            <div th:replace="fragments/footer :: footer"></div>
+        </div>
+
+        <script type="text/javascript" src="/js/jquery-1.11.2.min.js"></script>
+        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/main.js"></script>
+    </body>
+</html>
