@@ -2,7 +2,6 @@
 DROP TABLE IF EXISTS rbs_roles;
 DROP TABLE IF EXISTS rbs_users;
 DROP TABLE IF EXISTS rbs_objects;
-DROP TABLE IF EXISTS rbs_tables;
 DROP TABLE IF EXISTS rbs_authors;
 DROP TABLE IF EXISTS rbs_books;
 DROP TABLE IF EXISTS rbs_users_roles;
@@ -25,27 +24,18 @@ CREATE TABLE rbs_users (
 );
 
 CREATE TABLE rbs_objects (
-  -- id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  id INT NOT NULL AUTO_INCREMENT,
-  table_object_id INT NOT NULL,
- -- table_id INT NOT NULL,
-  table_name VARCHAR(255) NOT NULL,
-   PRIMARY KEY (table_object_id, table_name),
-  -- FOREIGN KEY (table_id) REFERENCES rbs_tables(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE rbs_tables (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(255) NOT NULL
+--  table_object_id INT NOT NULL,  for real global id a local table id has to be referenced
+  table_name VARCHAR(255) NOT NULL,
 );
 
 CREATE TABLE rbs_authors (
-  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE rbs_books (
-  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  id INT NOT NULL AUTO_INCREMENT,
   isbn INT NOT NULL,
   title VARCHAR(255) NOT NULL,
   author_id INT NOT NULL,

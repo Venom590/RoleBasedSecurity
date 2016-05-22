@@ -9,30 +9,21 @@ import javax.persistence.*;
 @Entity
 @DiscriminatorValue("de.unileipzig.bis.rbs.testApp.model.Book")
 @Table(name="rbs_books")
-@SecondaryTable(name="rbs_objects", pkJoinColumns={
-        @PrimaryKeyJoinColumn(name="table_object_id", referencedColumnName="id")//,
-        //@PrimaryKeyJoinColumn(name="table_name", referencedColumnName="'" + "de.unileipzig.bis.rbs.testApp.model.Book" + "'"),
-})
+@PrimaryKeyJoinColumn(name = "id")
+
 
 public class Book extends Object{
 
     /**
-     * Database id
-     */
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    /**
      * Book isbn
      */
-    @Column
+    @Column(name = "isbn")
     private String isbn;
 
     /**
      * Book title
      */
-    @Column
+    @Column(name = "title")
     private String title;
 
     /**
@@ -58,13 +49,6 @@ public class Book extends Object{
         this.isbn = isbn;
         this.title = title;
         this.author = author;
-    }
-
-    /**
-     * @return the id
-     */
-    public Long getId() {
-        return id;
     }
 
     public String getIsbn() { return isbn; }

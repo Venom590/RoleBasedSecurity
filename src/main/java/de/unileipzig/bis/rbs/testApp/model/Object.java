@@ -19,30 +19,13 @@ public class Object {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private Long id;
-
-    /**
-     * Object name
-     */
-    @Column(name = "table_object_id")
-    private Long tableObjectId;
-
-//    @Column(name = "table_name")
-//    private String tableName;
+    protected Long id;
 
     /**
      * Empty constructor as required in JPA
      */
     public Object() { }
 
-    /**
-     * Data constructor
-     *
-     * @param tableObjectId the name
-     */
-    public Object(Long tableObjectId) {
-        this.tableObjectId = tableObjectId;
-    }
 
     /**
      * @return the id
@@ -51,16 +34,9 @@ public class Object {
         return id;
     }
 
-    public Long getTableObjectId() {
-        return tableObjectId;
-    }
-
-    public void setTableObjectId(Long tableObjectId) {
-        this.tableObjectId = tableObjectId;
-    }
 
     @Override
     public String toString() {
-        return String.format("Object [id=%d, tableObjectId=%s]", id, tableObjectId);
+        return String.format("Object [id=%d]", id);
     }
 }

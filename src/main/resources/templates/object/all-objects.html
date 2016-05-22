@@ -15,7 +15,7 @@
                 <thead>
                     <tr>
                         <th>id</th>
-                        <th>name</th>
+                        <th>toString</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
@@ -25,7 +25,7 @@
                             <a href="#" th:href="@{/manage/object/{objectId}(objectId=${object.id})}" th:text="${object.id}">&nbsp;</a>
                         </td>
                         <td>
-                            <a href="#" th:href="@{/manage/object/{objectId}(objectId=${object.id})}" th:text="${object.name}">&nbsp;</a>
+                            <a href="#" th:href="@{/manage/object/{objectId}(objectId=${object.id})}" th:text="${object.toString()}">&nbsp;</a>
                         </td>
                         <td class="text-right">
                             <!-- TODO Embedded JS doesn't work -->

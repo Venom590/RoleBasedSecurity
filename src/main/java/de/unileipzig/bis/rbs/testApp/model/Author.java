@@ -9,28 +9,20 @@ import java.util.Set;
  */
 @Entity
 @DiscriminatorValue("de.unileipzig.bis.rbs.testApp.model.Author")
-@SecondaryTable(name="rbs_objects", pkJoinColumns={@PrimaryKeyJoinColumn(name="table_object_id", referencedColumnName="id")})
 @Table(name="rbs_authors")
+@PrimaryKeyJoinColumn(name = "id")
 public class Author extends Object{
-
-    /**
-     * Database id
-     */
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
-    private Long id;
 
     /**
      * Author name
      */
-    @Column
+    @Column(name = "name")
     private String name;
 
     /**
      * Set of roles of children
      */
-    @JoinColumn (name="author_id")
+    @JoinColumn (name="author_id", insertable = false, updatable = false)
 //    @OneToMany(mappedBy="author")
     @OneToMany()
     private Set<Book> books = new HashSet<Book>();
