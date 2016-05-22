@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>RoleBasedSecurity</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+    </head>
+    <body>
+        <div th:replace="fragments/header :: nav"></div>
+
+        <div class="container">
+            <h1>Author</h1>
+            <div class="row">
+                <div class="col-md-2"><strong>id</strong></div>
+                <div class="col-md-10"><span th:text="${author.id}">&nbsp;</span></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"><strong>name</strong></div>
+                <div class="col-md-10"><span th:text="${author.name}">&nbsp;</span></div>
+            </div>
+            <p>&nbsp;</p>
+            <p><a href="#" th:href="@{/manage/author}" class="btn btn-default">All authors</a>
+                <a href="#" th:href="@{/manage/author/edit/{authorId}(authorId=${author.id})}" class="btn btn-warning">
+                    <span class="glyphicon glyphicon-pencil"></span> Edit author
+                </a>
+            </p>
+
+            <div th:replace="fragments/footer :: footer"></div>
+        </div>
+
+        <script type="text/javascript" src="/js/jquery-1.11.2.min.js"></script>
+        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/main.js"></script>
+    </body>
+</html>

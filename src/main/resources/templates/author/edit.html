@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>RoleBasedSecurity</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+    </head>
+    <body>
+        <div th:replace="fragments/header :: nav"></div>
+
+        <div class="container">
+            <h1>Edit user <span th:text="${user.id}">&nbsp;</span></h1>
+            <form th:action="@{/manage/user/edit/{userId}(userId = ${user.id})}" method="post">
+                <div class="form-group">
+                    <label for="usernameinput">User name</label>
+                    <input name="username" type="text" class="form-control" id="usernameinput" placeholder="User name" th:value="${user.username}" />
+                </div>
+                <div class="form-group">
+                    <label for="passwordinput">Password</label>
+                    <input name="password" type="password" class="form-control" id="passwordinput" placeholder="Password" th:value="${user.password}" />
+                </div>
+                <div class="form-group">
+                    <label for="nameinput">Name</label>
+                    <input name="name" type="text" class="form-control" id="nameinput" placeholder="Name" th:value="${user.name}" />
+                </div>
+                <button type="submit" class="btn btn-success">Edit user</button>
+            </form>
+            <p>&nbsp;</p>
+            <p><a href="#" th:href="@{/manage/user}" class="btn btn-default">Back to all users</a></p>
+
+            <div th:replace="fragments/footer :: footer"></div>
+        </div>
+
+        <script type="text/javascript" src="/js/jquery-1.11.2.min.js"></script>
+        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/main.js"></script>
+    </body>
+</html>
