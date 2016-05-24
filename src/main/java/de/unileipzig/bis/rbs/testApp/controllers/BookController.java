@@ -2,6 +2,7 @@ package de.unileipzig.bis.rbs.testApp.controllers;
 
 import de.unileipzig.bis.rbs.testApp.model.Author;
 import de.unileipzig.bis.rbs.testApp.model.Book;
+import de.unileipzig.bis.rbs.testApp.model.Role;
 import de.unileipzig.bis.rbs.testApp.service.AuthorRepository;
 import de.unileipzig.bis.rbs.testApp.service.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,9 @@ public class BookController extends AbstractController {
      * @return the book creation mask
      */
     @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String create() {
+    public String create(Model model) {
+        Iterable<Author> allAuthors = authorRepository.findAll();
+        model.addAttribute("authors", allAuthors);
         return "book/create";
     }
 
@@ -77,7 +80,7 @@ public class BookController extends AbstractController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String doCreate(@RequestParam(value = "isbn") String isbn,
                            @RequestParam(value = "title") String title,
-                           @RequestParam(value = "authorId") Long authorId) {
+                           @RequestParam(value = "author_id") Long authorId) {
 
         Author author = authorRepository.findOne(Long.valueOf(authorId));
         bookRepository.save(new Book(isbn, title, author));
@@ -95,6 +98,8 @@ public class BookController extends AbstractController {
     public String edit(@PathVariable String bookid, Model model) {
         Book book = bookRepository.findOne(Long.valueOf(bookid));
         model.addAttribute("book", book);
+        Iterable<Author> allAuthors = authorRepository.findAll();
+        model.addAttribute("authors", allAuthors);
         return "book/edit";
     }
 
@@ -111,7 +116,7 @@ public class BookController extends AbstractController {
     public String doEdit(@PathVariable String bookid,
                          @RequestParam(value = "isbn") String isbn,
                          @RequestParam(value = "title") String title,
-                         @RequestParam(value = "authorId") Long authorId) {
+                         @RequestParam(value = "author_id") Long authorId) {
         Book book = bookRepository.findOne(Long.valueOf(bookid));
         Author author = authorRepository.findOne(Long.valueOf(authorId));
         book.setIsbn(isbn);

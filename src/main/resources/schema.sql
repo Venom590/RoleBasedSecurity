@@ -38,7 +38,7 @@ CREATE TABLE rbs_books (
   id INT NOT NULL AUTO_INCREMENT,
   isbn INT NOT NULL,
   title VARCHAR(255) NOT NULL,
-  author_id INT NOT NULL,
+  author_id INT NULL,
   FOREIGN KEY (author_id) REFERENCES rbs_authors(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
