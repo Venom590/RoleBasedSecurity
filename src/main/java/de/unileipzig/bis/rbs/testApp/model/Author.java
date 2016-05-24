@@ -8,7 +8,7 @@ import java.util.Set;
  * Created by Stephan on 21.05.2016.
  */
 @Entity
-@DiscriminatorValue("de.unileipzig.bis.rbs.testApp.model.Author")
+@DiscriminatorValue("rbs_authors")
 @Table(name="rbs_authors")
 @PrimaryKeyJoinColumn(name = "id")
 public class Author extends Object{

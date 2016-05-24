@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@DiscriminatorValue("de.unileipzig.bis.rbs.testApp.model.Book")
+@DiscriminatorValue("rbs_books")
 @Table(name="rbs_books")
 @PrimaryKeyJoinColumn(name = "id")
 
