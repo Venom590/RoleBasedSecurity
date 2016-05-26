@@ -31,12 +31,33 @@
                         </label>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="objectcheckboxes">objects</label>
-                    <div id="objectcheckboxes">
-                        <label class="checkbox-inline" th:each="object : ${objects}">
-                            <input type="checkbox" name="objects[]" th:value="${object.id}" th:checked="${role.objects.contains(object)}" /> <span th:text="${object.name}">&nbsp;</span>
-                        </label>
+                <h2>Objects</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>name</th>
+                                    <th class="text-center">can read</th>
+                                    <th class="text-center">can write</th>
+                                    <th class="text-center">can delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="object : ${objects}">
+                                    <td th:text="${object.name}">&nbsp;</td>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="can_read[]" th:value="${object.id}" th:checked="${role.canRead(object)}" />
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="can_write[]" th:value="${object.id}" th:checked="${role.canWrite(object)}" />
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="can_delete[]" th:value="${object.id}" th:checked="${role.canDelete(object)}" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-success">Edit role</button>

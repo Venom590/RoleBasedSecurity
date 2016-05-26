@@ -34,7 +34,7 @@ public class Role {
      * Set of roles of children
      */
     @OneToMany(mappedBy="parentRole")
-    private Set<Role> childrenRoles = new HashSet<Role>();
+    private Set<Role> childrenRoles = new HashSet<>(0);
 
     /**
      * Name
@@ -51,7 +51,7 @@ public class Role {
     }, inverseJoinColumns = {
             @JoinColumn(name = "user_id", nullable = false)
     })
-    private Set<User> users;
+    private Set<User> users = new HashSet<>(0);
 
     /**
      * Objects
@@ -62,7 +62,10 @@ public class Role {
     }, inverseJoinColumns = {
             @JoinColumn(name = "object_id", nullable = false)
     })
-    private Set<DataObject> objects;
+    private Set<DataObject> objects = new HashSet<>(0);
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.role", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RoleObject> roleObjects = new HashSet<>(0);
 
     /**
      * Empty constructor as required in JPA
@@ -133,14 +136,14 @@ public class Role {
     /**
      * @return the users
      */
-    public Set getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
     /**
      * @param users the users to set
      */
-    public void setUsers(Set users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 
@@ -175,6 +178,57 @@ public class Role {
     @PreRemove
     public void preRemove(){
         this.parentRole = null;
+    }
+
+    public Set<RoleObject> getRoleObjects() {
+        return roleObjects;
+    }
+
+    public void setRoleObjects(Set<RoleObject> roleObjects) {
+        this.roleObjects = roleObjects;
+    }
+
+    public boolean canRead(DataObject object) {
+        for (RoleObject roleObject: roleObjects) {
+            if (roleObject.getObject().equals(object) && roleObject.getCanRead()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean canWrite(DataObject object) {
+        for (RoleObject roleObject: roleObjects) {
+            if (roleObject.getObject().equals(object) && roleObject.getCanWrite()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean canDelete(DataObject object) {
+        for (RoleObject roleObject: roleObjects) {
+            if (roleObject.getObject().equals(object) && roleObject.getCanDelete()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Role role = (Role) o;
+
+        return id != null ? id.equals(role.id) : role.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override

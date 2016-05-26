@@ -29,10 +29,33 @@
                     <span th:each="user : ${role.users}"><a th:href="@{/manage/user/{userId}(userId=${user.id})}" th:text="${user.username}">&nbsp;</a></span>
                 </div>
             </div>
+            <h2>Objects</h2>
             <div class="row">
-                <div class="col-md-2"><strong>objects</strong></div>
-                <div class="col-md-4">
-                    <span th:each="object : ${role.objects}"><a th:href="@{/manage/object/{objectId}(object=${object.id})}" th:text="${object.name}">&nbsp;</a></span>
+                <div class="col-md-6">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>name</th>
+                                <th class="text-center">can read</th>
+                                <th class="text-center">can write</th>
+                                <th class="text-center">can delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="roleObject : ${role.roleObjects}">
+                                <td><a th:href="@{/manage/object/{objectId}(objectId=${roleObject.object.id})}" th:text="${roleObject.object.name}">&nbsp;</a></td>
+                                <td class="text-center">
+                                    <span th:class="${roleObject.canRead} ? 'text-success glyphicon glyphicon-ok' : 'text-danger glyphicon glyphicon-remove'"></span>
+                                </td>
+                                <td class="text-center">
+                                    <span th:class="${roleObject.canWrite} ? 'text-success glyphicon glyphicon-ok' : 'text-danger glyphicon glyphicon-remove'"></span>
+                                </td>
+                                <td class="text-center">
+                                    <span th:class="${roleObject.canDelete} ? 'text-success glyphicon glyphicon-ok' : 'text-danger glyphicon glyphicon-remove'"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <p>&nbsp;</p>

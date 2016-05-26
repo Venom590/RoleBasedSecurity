@@ -1,6 +1,7 @@
 package de.unileipzig.bis.rbs.testApp.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -46,7 +47,7 @@ public class User {
     }, inverseJoinColumns = {
             @JoinColumn(name = "role_id", nullable = false)
     })
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>(0);
 
     /**
      * Empty constructor as required in JPA
@@ -118,15 +119,31 @@ public class User {
     /**
      * @return the roles
      */
-    public Set getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
     /**
      * @param roles the roles to set
      */
-    public void setRoles(Set roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        return id != null ? id.equals(user.id) : user.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override

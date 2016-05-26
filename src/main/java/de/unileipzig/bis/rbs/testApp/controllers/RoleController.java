@@ -2,6 +2,7 @@ package de.unileipzig.bis.rbs.testApp.controllers;
 
 import de.unileipzig.bis.rbs.testApp.model.DataObject;
 import de.unileipzig.bis.rbs.testApp.model.Role;
+import de.unileipzig.bis.rbs.testApp.model.RoleObject;
 import de.unileipzig.bis.rbs.testApp.model.User;
 import de.unileipzig.bis.rbs.testApp.service.DataObjectRepository;
 import de.unileipzig.bis.rbs.testApp.service.RoleRepository;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -99,7 +102,9 @@ public class RoleController extends AbstractController {
     public String doCreate(@RequestParam(value = "parent_id") Long parentId,
                            @RequestParam(value = "name", required = false) String name,
                            @RequestParam(value = "users[]", required = false) Long[] userIds,
-                           @RequestParam(value = "objects[]", required = false) Long[] objectIds) {
+                           @RequestParam(value = "can_read[]", required = false) Long[] canReadObjectIds,
+                           @RequestParam(value = "can_write[]", required = false) Long[] canWriteObjectIds,
+                           @RequestParam(value = "can_delete[]", required = false) Long[] canDeleteObjectIds) {
         Role role = new Role();
         role.setName(name);
         if (parentId != null && parentId != 0) {
@@ -111,14 +116,39 @@ public class RoleController extends AbstractController {
                 users.add(userRepository.findOne(userId));
             }
         }
-        role.setUsers(users);
-        Set<DataObject> objects = new HashSet<>();
-        if (objectIds != null) {
-            for (Long objectId : objectIds) {
-                objects.add(dataObjectRepository.findOne(objectId));
+        role.getUsers().addAll(users);
+        HashMap<String, Long[]> idCollection = new HashMap<>();
+        idCollection.put("can_read", canReadObjectIds);
+        idCollection.put("can_write", canWriteObjectIds);
+        idCollection.put("can_delete", canDeleteObjectIds);
+        HashMap<Long, RoleObject> roleObjects = new HashMap<>();
+        for (Map.Entry<String, Long[]> entry: idCollection.entrySet()) {
+            String rightString = entry.getKey();
+            Long[] objectIds = entry.getValue();
+            if (objectIds != null) {
+                for (Long objectId : objectIds) {
+                    RoleObject roleObject = roleObjects.get(objectId);
+                    if (roleObject == null) {
+                        roleObject = new RoleObject();
+                        roleObject.setRole(role);
+                        roleObject.setObject(dataObjectRepository.findOne(objectId));
+                    }
+                    switch (rightString) {
+                        case "can_read":
+                            roleObject.setCanRead(true);
+                            break;
+                        case "can_write":
+                            roleObject.setCanWrite(true);
+                            break;
+                        case "can_delete":
+                            roleObject.setCanDelete(true);
+                            break;
+                    }
+                    roleObjects.put(objectId, roleObject);
+                }
             }
         }
-        role.setObjects(objects);
+        role.getRoleObjects().addAll(new HashSet<>(roleObjects.values()));
         roleRepository.save(role);
         return "redirect:/manage/role";
     }
@@ -156,7 +186,9 @@ public class RoleController extends AbstractController {
                          @RequestParam(value = "parent_id", required = false) Long parentId,
                          @RequestParam(value = "name") String name,
                          @RequestParam(value = "users[]", required = false) Long[] userIds,
-                         @RequestParam(value = "objects[]", required = false) Long[] objectIds) {
+                         @RequestParam(value = "can_read[]", required = false) Long[] canReadObjectIds,
+                         @RequestParam(value = "can_write[]", required = false) Long[] canWriteObjectIds,
+                         @RequestParam(value = "can_delete[]", required = false) Long[] canDeleteObjectIds) {
         Role role = roleRepository.findOne(Long.valueOf(roleid));
         if (parentId != null && parentId != 0) {
             Role parentRole = roleRepository.findOne(parentId);
@@ -171,14 +203,41 @@ public class RoleController extends AbstractController {
                 users.add(userRepository.findOne(userId));
             }
         }
-        role.setUsers(users);
-        Set<DataObject> objects = new HashSet<>();
-        if (objectIds != null) {
-            for (Long objectId : objectIds) {
-                objects.add(dataObjectRepository.findOne(objectId));
+        role.getUsers().clear();
+        role.getUsers().addAll(users);
+        HashMap<String, Long[]> idCollection = new HashMap<>();
+        idCollection.put("can_read", canReadObjectIds);
+        idCollection.put("can_write", canWriteObjectIds);
+        idCollection.put("can_delete", canDeleteObjectIds);
+        HashMap<Long, RoleObject> roleObjects = new HashMap<>();
+        for (Map.Entry<String, Long[]> entry: idCollection.entrySet()) {
+            String rightString = entry.getKey();
+            Long[] objectIds = entry.getValue();
+            if (objectIds != null) {
+                for (Long objectId : objectIds) {
+                    RoleObject roleObject = roleObjects.get(objectId);
+                    if (roleObject == null) {
+                        roleObject = new RoleObject();
+                        roleObject.setRole(role);
+                        roleObject.setObject(dataObjectRepository.findOne(objectId));
+                    }
+                    switch (rightString) {
+                        case "can_read":
+                            roleObject.setCanRead(true);
+                            break;
+                        case "can_write":
+                            roleObject.setCanWrite(true);
+                            break;
+                        case "can_delete":
+                            roleObject.setCanDelete(true);
+                            break;
+                    }
+                    roleObjects.put(objectId, roleObject);
+                }
             }
         }
-        role.setObjects(objects);
+        role.getRoleObjects().clear();
+        role.getRoleObjects().addAll(new HashSet<>(roleObjects.values()));
         roleRepository.save(role);
         return "redirect:/manage/role/" + roleid;
     }

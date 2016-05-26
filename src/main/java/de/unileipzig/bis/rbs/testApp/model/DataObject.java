@@ -1,6 +1,7 @@
 package de.unileipzig.bis.rbs.testApp.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -34,7 +35,10 @@ public class DataObject {
     }, inverseJoinColumns = {
             @JoinColumn(name = "role_id", nullable = false)
     })
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>(0);
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.object", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RoleObject> roleObjects = new HashSet<>(0);
 
     /**
      * Empty constructor as required in JPA
@@ -83,6 +87,30 @@ public class DataObject {
      */
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<RoleObject> getRoleObjects() {
+        return roleObjects;
+    }
+
+    public void setRoleObjects(Set<RoleObject> roleObjects) {
+        this.roleObjects = roleObjects;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DataObject that = (DataObject) o;
+
+        return id != null ? id.equals(that.id) : that.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override

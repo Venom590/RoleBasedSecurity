@@ -98,7 +98,7 @@ public class UserController extends AbstractController {
                 roles.add(roleRepository.findOne(roleId));
             }
         }
-        user.setRoles(roles);
+        user.getRoles().addAll(roles);
         userRepository.save(user);
         return "redirect:/manage/user";
     }
@@ -145,7 +145,8 @@ public class UserController extends AbstractController {
                 roles.add(roleRepository.findOne(roleId));
             }
         }
-        user.setRoles(roles);
+        user.getRoles().clear();
+        user.getRoles().addAll(roles);
         userRepository.save(user);
         return "redirect:/manage/user/" + userid;
     }
