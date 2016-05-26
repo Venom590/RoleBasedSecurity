@@ -1,7 +1,11 @@
 package de.unileipzig.bis.rbs.testApp.controllers;
 
+import de.unileipzig.bis.rbs.testApp.model.DataObject;
 import de.unileipzig.bis.rbs.testApp.model.Role;
+import de.unileipzig.bis.rbs.testApp.model.User;
+import de.unileipzig.bis.rbs.testApp.service.DataObjectRepository;
 import de.unileipzig.bis.rbs.testApp.service.RoleRepository;
+import de.unileipzig.bis.rbs.testApp.service.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The role controller to manage roles in this application.
@@ -24,6 +31,18 @@ public class RoleController extends AbstractController {
      */
     @Autowired
     private RoleRepository roleRepository;
+
+    /**
+     * The user repository
+     */
+    @Autowired
+    private UserRepository userRepository;
+
+    /**
+     * The object repository
+     */
+    @Autowired
+    private DataObjectRepository dataObjectRepository;
 
     /**
      * Get all roles
@@ -61,7 +80,11 @@ public class RoleController extends AbstractController {
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model) {
         Iterable<Role> allRoles = roleRepository.findAll();
+        Iterable<User> users = userRepository.findAll();
+        Iterable<DataObject> objects = dataObjectRepository.findAll();
         model.addAttribute("roles", allRoles);
+        model.addAttribute("users", users);
+        model.addAttribute("objects", objects);
         return "role/create";
     }
 
@@ -74,12 +97,28 @@ public class RoleController extends AbstractController {
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String doCreate(@RequestParam(value = "parent_id") Long parentId,
-                           @RequestParam(value = "name", required = false) String name) {
+                           @RequestParam(value = "name", required = false) String name,
+                           @RequestParam(value = "users[]", required = false) Long[] userIds,
+                           @RequestParam(value = "objects[]", required = false) Long[] objectIds) {
         Role role = new Role();
         role.setName(name);
         if (parentId != null && parentId != 0) {
             role.setParentRole(roleRepository.findOne(parentId));
         }
+        Set<User> users = new HashSet<>();
+        if (userIds != null) {
+            for (Long userId : userIds) {
+                users.add(userRepository.findOne(userId));
+            }
+        }
+        role.setUsers(users);
+        Set<DataObject> objects = new HashSet<>();
+        if (objectIds != null) {
+            for (Long objectId : objectIds) {
+                objects.add(dataObjectRepository.findOne(objectId));
+            }
+        }
+        role.setObjects(objects);
         roleRepository.save(role);
         return "redirect:/manage/role";
     }
@@ -97,6 +136,10 @@ public class RoleController extends AbstractController {
         model.addAttribute("role", role);
         Iterable<Role> allRoles = roleRepository.findAll();
         model.addAttribute("roles", allRoles);
+        Iterable<User> users = userRepository.findAll();
+        model.addAttribute("users", users);
+        Iterable<DataObject> objects = dataObjectRepository.findAll();
+        model.addAttribute("objects", objects);
         return "role/edit";
     }
 
@@ -111,7 +154,9 @@ public class RoleController extends AbstractController {
     @RequestMapping(value = "/edit/{roleid}", method = RequestMethod.POST)
     public String doEdit(@PathVariable String roleid,
                          @RequestParam(value = "parent_id", required = false) Long parentId,
-                         @RequestParam(value = "name") String name) {
+                         @RequestParam(value = "name") String name,
+                         @RequestParam(value = "users[]", required = false) Long[] userIds,
+                         @RequestParam(value = "objects[]", required = false) Long[] objectIds) {
         Role role = roleRepository.findOne(Long.valueOf(roleid));
         if (parentId != null && parentId != 0) {
             Role parentRole = roleRepository.findOne(parentId);
@@ -120,6 +165,20 @@ public class RoleController extends AbstractController {
             role.setParentRole(null);
         }
         role.setName(name);
+        Set<User> users = new HashSet<>();
+        if (userIds != null) {
+            for (Long userId : userIds) {
+                users.add(userRepository.findOne(userId));
+            }
+        }
+        role.setUsers(users);
+        Set<DataObject> objects = new HashSet<>();
+        if (objectIds != null) {
+            for (Long objectId : objectIds) {
+                objects.add(dataObjectRepository.findOne(objectId));
+            }
+        }
+        role.setObjects(objects);
         roleRepository.save(role);
         return "redirect:/manage/role/" + roleid;
     }

@@ -43,6 +43,28 @@ public class Role {
     private String name;
 
     /**
+     * Users
+     */
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "rbs_users_roles", joinColumns = {
+            @JoinColumn(name = "role_id", nullable = false)
+    }, inverseJoinColumns = {
+            @JoinColumn(name = "user_id", nullable = false)
+    })
+    private Set<User> users;
+
+    /**
+     * Objects
+     */
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "rbs_roles_objects", joinColumns = {
+            @JoinColumn(name = "role_id", nullable = false)
+    }, inverseJoinColumns = {
+            @JoinColumn(name = "object_id", nullable = false)
+    })
+    private Set<DataObject> objects;
+
+    /**
      * Empty constructor as required in JPA
      */
     public Role() { }
@@ -106,6 +128,34 @@ public class Role {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * @return the users
+     */
+    public Set getUsers() {
+        return users;
+    }
+
+    /**
+     * @param users the users to set
+     */
+    public void setUsers(Set users) {
+        this.users = users;
+    }
+
+    /**
+     * @return the dataObjects
+     */
+    public Set<DataObject> getObjects() {
+        return objects;
+    }
+
+    /**
+     * @param objects the dataObjects to set
+     */
+    public void setObjects(Set<DataObject> objects) {
+        this.objects = objects;
     }
 
     /**

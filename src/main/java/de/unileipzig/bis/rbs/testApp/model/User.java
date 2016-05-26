@@ -1,6 +1,7 @@
 package de.unileipzig.bis.rbs.testApp.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * User database entity model.
@@ -35,6 +36,17 @@ public class User {
      */
     @Column
     private String name;
+
+    /**
+     * Roles
+     */
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "rbs_users_roles", joinColumns = {
+            @JoinColumn(name = "user_id", nullable = false)
+    }, inverseJoinColumns = {
+            @JoinColumn(name = "role_id", nullable = false)
+    })
+    private Set<Role> roles;
 
     /**
      * Empty constructor as required in JPA
@@ -101,6 +113,20 @@ public class User {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * @return the roles
+     */
+    public Set getRoles() {
+        return roles;
+    }
+
+    /**
+     * @param roles the roles to set
+     */
+    public void setRoles(Set roles) {
+        this.roles = roles;
     }
 
     @Override

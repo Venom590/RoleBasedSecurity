@@ -23,6 +23,22 @@
                     <label for="nameinput">Name</label>
                     <input name="name" type="text" class="form-control" id="nameinput" placeholder="Name" th:value="${role.name}" />
                 </div>
+                <div class="form-group">
+                    <label for="usercheckboxes">users</label>
+                    <div id="usercheckboxes">
+                        <label class="checkbox-inline" th:each="user : ${users}">
+                            <input type="checkbox" name="users[]" th:value="${user.id}" th:checked="${role.users.contains(user)}" /> <span th:text="${user.username}">&nbsp;</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="objectcheckboxes">objects</label>
+                    <div id="objectcheckboxes">
+                        <label class="checkbox-inline" th:each="object : ${objects}">
+                            <input type="checkbox" name="objects[]" th:value="${object.id}" th:checked="${role.objects.contains(object)}" /> <span th:text="${object.name}">&nbsp;</span>
+                        </label>
+                    </div>
+                </div>
                 <button type="submit" class="btn btn-success">Edit role</button>
             </form>
             <p>&nbsp;</p>

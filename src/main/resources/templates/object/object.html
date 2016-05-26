@@ -19,6 +19,12 @@
                 <div class="col-md-2"><strong>name</strong></div>
                 <div class="col-md-10"><span th:text="${object.name}">&nbsp;</span></div>
             </div>
+            <div class="row">
+                <div class="col-md-2"><strong>roles</strong></div>
+                <div class="col-md-4">
+                    <span th:each="role : ${object.roles}"><a th:href="@{/manage/role/{roleId}(roleId=${role.id})}" th:text="${role.name}">&nbsp;</a></span>
+                </div>
+            </div>
             <p>&nbsp;</p>
             <p><a href="#" th:href="@{/manage/object}" class="btn btn-default">All objects</a>
                 <a href="#" th:href="@{/manage/object/edit/{objectId}(objectId=${object.id})}" class="btn btn-warning">

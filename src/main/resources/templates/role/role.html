@@ -23,6 +23,18 @@
                 <div class="col-md-2"><strong>name</strong></div>
                 <div class="col-md-10"><span th:text="${role.name}">&nbsp;</span></div>
             </div>
+            <div class="row">
+                <div class="col-md-2"><strong>users</strong></div>
+                <div class="col-md-4">
+                    <span th:each="user : ${role.users}"><a th:href="@{/manage/user/{userId}(userId=${user.id})}" th:text="${user.username}">&nbsp;</a></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"><strong>objects</strong></div>
+                <div class="col-md-4">
+                    <span th:each="object : ${role.objects}"><a th:href="@{/manage/object/{objectId}(object=${object.id})}" th:text="${object.name}">&nbsp;</a></span>
+                </div>
+            </div>
             <p>&nbsp;</p>
             <p><a href="#" th:href="@{/manage/role}" class="btn btn-default">Back to all roles</a>
                 <a href="#" th:href="@{/manage/role/edit/{roleId}(roleId=${role.id})}" class="btn btn-warning">
