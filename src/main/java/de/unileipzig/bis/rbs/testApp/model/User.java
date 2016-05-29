@@ -130,6 +130,33 @@ public class User {
         this.roles = roles;
     }
 
+    public boolean canRead(DataObject object) {
+        for (Role role: roles) {
+            if (role.canRead(object)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean canWrite(DataObject object) {
+        for (Role role: roles) {
+            if (role.canRead(object)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean canDelete(DataObject object) {
+        for (Role role: roles) {
+            if (role.canRead(object)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
