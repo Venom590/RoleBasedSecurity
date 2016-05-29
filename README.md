@@ -21,7 +21,7 @@ as Maven takes care about them.
  - Navigate to the root directory of this project
  - Execute `mvn install -DskipTests` to build jars
  - Now a jar-file was created, you can simply run it via
- 'java -jar /target/role-base-security-X-Y.jar' where 'X' and 'Y' represent the version you are using
+ `java -jar /target/role-base-security-X-Y.jar` where 'X' and 'Y' represent the version you are using
 - Using a IDE
  - Switch to the default run configurations, if you changed them
  - Rightclick 'TestApp.java' at 'de.unileipzig.bis.rbs.testApp' and then 'Run TestApp.main()'
