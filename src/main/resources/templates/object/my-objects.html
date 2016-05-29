@@ -10,49 +10,48 @@
         <div th:replace="fragments/header :: nav"></div>
 
         <div class="container">
-            <h1>All Books</h1>
+            <h1>My Objects</h1>
             <table class="table table-hover table-striped">
                 <thead>
                     <tr>
                         <th>id</th>
-                        <th>isbn</th>
-                        <th>title</th>
-                        <th>author</th>
+                        <th>toString</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="book : ${books}">
+                    <tr th:each="object : ${objects}">
                         <td>
-                            <a href="#" th:href="@{/manage/book/{bookId}(bookId=${book.id})}" th:text="${book.id}">&nbsp;</a>
+                            <a href="#" th:href="@{/manage/object/{objectId}(objectId=${object.id})}" th:text="${object.id}">
+                                &nbsp;</a>
                         </td>
                         <td>
-                            <a href="#" th:href="@{/manage/book/{bookId}(bookId=${book.id})}" th:text="${book.isbn}">&nbsp;</a>
-                        </td>
-                        <td>
-                            <a href="#" th:href="@{/manage/book/{bookId}(bookId=${book.id})}" th:text="${book.title}">&nbsp;</a>
-                        </td>
-                        <td>
-                            <a href="#" th:href="@{/manage/book/{bookId}(bookId=${book.author?.id})}" th:text="${book.author?.name}">&nbsp;</a>
+                            <a href="#" th:href="@{/manage/object/{objectId}(objectId=${object.id})}"
+                               th:text="${object.toString()}">&nbsp;</a>
                         </td>
                         <td class="text-right">
                             <!-- TODO Embedded JS doesn't work -->
-                            <span th:if="${getCurrentUser.canWrite(book)}"  >
-                               <a href="#" th:href="@{/manage/book/edit/{bookId}(bookId=${book.id})}" class="btn btn-warning">
+                            <span th:if="${getCurrentUser.canWrite(object)}">
+                               <a href="#"
+                                  th:href="@{/manage/{objectClass}/edit/{objectId}(objectId=${object.id}, objectClass=${object.getClass().getSimpleName().toLowerCase()})}"
+                                  class="btn btn-warning">
                                    <span class="glyphicon glyphicon-pencil"></span> Edit
                                </a>
                             </span>
-                           <span th:unless="${getCurrentUser.canWrite(book)}"  >
+                           <span th:unless="${getCurrentUser.canWrite(object)}">
                                <button th:type="button" class="btn btn-warning disabled">
                                    <span class="glyphicon glyphicon-pencil"></span> Edit
                                </button>
                            </span>
-                           <span th:if="${getCurrentUser.canDelete(book)}"  >
-                               <a href="#" th:href="@{/manage/book/delete/{bookId}(bookId=${book.id})}" class="btn btn-danger" th:onclick="'return confirm(\'Are you sure, you want to delete this record?\');'">
+                           <span th:if="${getCurrentUser.canDelete(object)}">
+                               <a href="#"
+                                  th:href="@{/manage/{objectClass}/delete/{objectId}(objectId=${object.id}, objectClass=${object.getClass().getSimpleName().toLowerCase()})}"
+                                  class="btn btn-danger"
+                                  th:onclick="'return confirm(\'Are you sure, you want to delete this record?\');'">
                                    <span class="glyphicon glyphicon-remove"></span> Delete
                                </a>
                            </span>
-                           <span th:unless="${getCurrentUser.canDelete(book)}"  >
+                           <span th:unless="${getCurrentUser.canDelete(object)}">
                                <button th:type="button" class="btn btn-danger disabled">
                                    <span class="glyphicon glyphicon-remove"></span> Delete
                                </button>
@@ -61,8 +60,6 @@
                     </tr>
                 </tbody>
             </table>
-            <p><a href="#" th:href="@{/manage/book/create}" class="btn btn-default">Create new book</a></p>
-
             <div th:replace="fragments/footer :: footer"></div>
         </div>
 

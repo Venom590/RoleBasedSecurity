@@ -16,6 +16,9 @@
                     <tr>
                         <th>id</th>
                         <th>toString</th>
+                        <th class="text-center">can read</th>
+                        <th class="text-center">can write</th>
+                        <th class="text-center">can delete</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
@@ -27,19 +30,18 @@
                         <td>
                             <a href="#" th:href="@{/manage/object/{objectId}(objectId=${object.id})}" th:text="${object.toString()}">&nbsp;</a>
                         </td>
-                        <td class="text-right">
-                            <!-- TODO Embedded JS doesn't work -->
-                            <a href="#" th:href="@{/manage/object/edit/{objectId}(objectId=${object.id})}" class="btn btn-warning">
-                                <span class="glyphicon glyphicon-pencil"></span> Edit
-                            </a>
-                            <a href="#" th:href="@{/manage/object/delete/{objectId}(objectId=${object.id})}" class="btn btn-danger" th:onclick="'return confirm(\'Are you sure, you want to delete this record?\');'">
-                                <span class="glyphicon glyphicon-remove"></span> Delete
-                            </a>
+                        <td class="text-center">
+                            <span th:class="${getCurrentUser.canRead(object)} ? 'text-success glyphicon glyphicon-ok' : 'text-danger glyphicon glyphicon-remove'"></span>
+                        </td>
+                        <td class="text-center">
+                            <span th:class="${getCurrentUser.canWrite(object)} ? 'text-success glyphicon glyphicon-ok' : 'text-danger glyphicon glyphicon-remove'"></span>
+                        </td>
+                        <td class="text-center">
+                            <span th:class="${getCurrentUser.canDelete(object)} ? 'text-success glyphicon glyphicon-ok' : 'text-danger glyphicon glyphicon-remove'"></span>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <p><a href="#" th:href="@{/manage/object/create}" class="btn btn-default">Create new object</a></p>
 
             <div th:replace="fragments/footer :: footer"></div>
         </div>

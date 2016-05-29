@@ -141,7 +141,7 @@ public class User {
 
     public boolean canWrite(DataObject object) {
         for (Role role: roles) {
-            if (role.canRead(object)) {
+            if (role.canWrite(object)) {
                 return true;
             }
         }
@@ -150,7 +150,7 @@ public class User {
 
     public boolean canDelete(DataObject object) {
         for (Role role: roles) {
-            if (role.canRead(object)) {
+            if (role.canDelete(object)) {
                 return true;
             }
         }

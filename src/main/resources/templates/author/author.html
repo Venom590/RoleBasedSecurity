@@ -19,6 +19,35 @@
                 <div class="col-md-2"><strong>name</strong></div>
                 <div class="col-md-10"><span th:text="${author.name}">&nbsp;</span></div>
             </div>
+            <h2>Roles</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>name</th>
+                            <th class="text-center">can read</th>
+                            <th class="text-center">can write</th>
+                            <th class="text-center">can delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="roleObject : ${author.roleObjects}">
+                            <td><a th:href="@{/manage/role/{roleId}(roleId=${roleObject.role.id})}" th:text="${roleObject.role.name}">&nbsp;</a></td>
+                            <td class="text-center">
+                                <span th:class="${roleObject.canRead} ? 'text-success glyphicon glyphicon-ok' : 'text-danger glyphicon glyphicon-remove'"></span>
+                            </td>
+                            <td class="text-center">
+                                <span th:class="${roleObject.canWrite} ? 'text-success glyphicon glyphicon-ok' : 'text-danger glyphicon glyphicon-remove'"></span>
+                            </td>
+                            <td class="text-center">
+                                <span th:class="${roleObject.canDelete} ? 'text-success glyphicon glyphicon-ok' : 'text-danger glyphicon glyphicon-remove'"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <p>&nbsp;</p>
             <p><a href="#" th:href="@{/manage/author}" class="btn btn-default">All authors</a>
                 <a href="#" th:href="@{/manage/author/edit/{authorId}(authorId=${author.id})}" class="btn btn-warning">

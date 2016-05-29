@@ -5,6 +5,7 @@ import de.unileipzig.bis.rbs.testApp.model.Book;
 import de.unileipzig.bis.rbs.testApp.model.Role;
 import de.unileipzig.bis.rbs.testApp.service.AuthorRepository;
 import de.unileipzig.bis.rbs.testApp.service.BookRepository;
+import de.unileipzig.bis.rbs.testApp.service.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +31,10 @@ public class BookController extends AbstractController {
 
     @Autowired
     private AuthorRepository authorRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
     /**
      * Get all books
      *
@@ -66,6 +71,8 @@ public class BookController extends AbstractController {
     public String create(Model model) {
         Iterable<Author> allAuthors = authorRepository.findAll();
         model.addAttribute("authors", allAuthors);
+        Iterable<Role> roles = roleRepository.findAll();
+        model.addAttribute("roles", roles);
         return "book/create";
     }
 
@@ -80,10 +87,16 @@ public class BookController extends AbstractController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String doCreate(@RequestParam(value = "isbn") String isbn,
                            @RequestParam(value = "title") String title,
-                           @RequestParam(value = "author_id") Long authorId) {
+                           @RequestParam(value = "author_id") Long authorId,
+                           @RequestParam(value = "can_read[]", required = false) Long[] canReadRoleIds,
+                           @RequestParam(value = "can_write[]", required = false) Long[] canWriteRoleIds,
+                           @RequestParam(value = "can_delete[]", required = false) Long[] canDeleteRoleIds) {
 
         Author author = authorRepository.findOne(Long.valueOf(authorId));
-        bookRepository.save(new Book(isbn, title, author));
+        Book book = new Book(isbn, title, author);
+        this.setRoleObjectsToObject(book, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
+
+        bookRepository.save(book);
         return "redirect:/manage/book";
     }
 
@@ -100,6 +113,8 @@ public class BookController extends AbstractController {
         model.addAttribute("book", book);
         Iterable<Author> allAuthors = authorRepository.findAll();
         model.addAttribute("authors", allAuthors);
+        Iterable<Role> roles = roleRepository.findAll();
+        model.addAttribute("roles", roles);
         return "book/edit";
     }
 
@@ -116,12 +131,17 @@ public class BookController extends AbstractController {
     public String doEdit(@PathVariable String bookid,
                          @RequestParam(value = "isbn") String isbn,
                          @RequestParam(value = "title") String title,
-                         @RequestParam(value = "author_id") Long authorId) {
+                         @RequestParam(value = "author_id") Long authorId,
+                         @RequestParam(value = "can_read[]", required = false) Long[] canReadRoleIds,
+                         @RequestParam(value = "can_write[]", required = false) Long[] canWriteRoleIds,
+                         @RequestParam(value = "can_delete[]", required = false) Long[] canDeleteRoleIds) {
         Book book = bookRepository.findOne(Long.valueOf(bookid));
         Author author = authorRepository.findOne(Long.valueOf(authorId));
         book.setIsbn(isbn);
         book.setTitle(title);
         book.setAuthor(author);
+        this.setRoleObjectsToObject(book, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
+
         bookRepository.save(book);
         return "redirect:/manage/book/" + bookid;
     }

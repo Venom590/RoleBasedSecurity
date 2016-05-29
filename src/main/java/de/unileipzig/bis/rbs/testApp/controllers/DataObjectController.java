@@ -3,6 +3,7 @@ package de.unileipzig.bis.rbs.testApp.controllers;
 import de.unileipzig.bis.rbs.testApp.model.DataObject;
 import de.unileipzig.bis.rbs.testApp.model.Role;
 import de.unileipzig.bis.rbs.testApp.model.RoleObject;
+import de.unileipzig.bis.rbs.testApp.model.User;
 import de.unileipzig.bis.rbs.testApp.service.DataObjectRepository;
 import de.unileipzig.bis.rbs.testApp.service.RoleObjectRepository;
 import de.unileipzig.bis.rbs.testApp.service.RoleRepository;
@@ -48,9 +49,36 @@ public class DataObjectController extends AbstractController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String objects(Model model) {
-        Iterable<DataObject> objects = dataObjectRepository.findAll();
-        model.addAttribute("objects", objects);
+        User user = this.getCurrentUser();
+        Iterable<DataObject> allObjects = dataObjectRepository.findAll();
+        List<DataObject> objects = new ArrayList<>();
+        for (DataObject object: allObjects) {
+            if (user.canRead(object)) {
+                objects.add(object);
+            }
+        }
+        model.addAttribute("objects", allObjects);
         return "object/all-objects";
+    };
+
+    /**
+     * Get all objects
+     *
+     * @param model the ui model
+     * @return the view
+     */
+    @RequestMapping(value = "/myobjects", method = RequestMethod.GET)
+    public String myObjects(Model model) {
+        User user = this.getCurrentUser();
+        Iterable<DataObject> allObjects = dataObjectRepository.findAll();
+        List<DataObject> objects = new ArrayList<>();
+        for (DataObject object: allObjects) {
+            if (user.canRead(object)) {
+                objects.add(object);
+            }
+        }
+        model.addAttribute("objects", objects);
+        return "object/my-objects";
     };
 
     /**
@@ -63,8 +91,9 @@ public class DataObjectController extends AbstractController {
     @RequestMapping(value = "/{objectid}", method = RequestMethod.GET)
     public String object(@PathVariable String objectid, Model model) {
         DataObject object = dataObjectRepository.findOne(Long.valueOf(objectid));
-        model.addAttribute("object", object);
-        return "object/object";
+        return "redirect:/manage/" + object.getClass().getSimpleName().toLowerCase() + "/" + objectid;
+//        model.addAttribute("object", object);
+//        return "object/object";
     }
 
     /**
