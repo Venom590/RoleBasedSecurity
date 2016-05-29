@@ -62,6 +62,7 @@ public class Book extends DataObject {
 
     @Override
     public String toString() {
-        return String.format("Book [id=%d, isbn=%s, title=%s, author=%s]", id, isbn, title, author.getName());
+        return String.format("Book [id=%d, isbn=%s, title=%s, author=%s]",
+          id, isbn, title, author == null? "Null" : author.getName());
     }
 }
