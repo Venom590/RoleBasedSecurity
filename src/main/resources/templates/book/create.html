@@ -23,7 +23,6 @@
                 <div class="form-group">
                     <label for="authoridinput">AuthorID</label>
                     <select class="form-control" id="authoridinput" name="author_id">
-                        <option value=""></option>
                         <option th:each="author : ${authors}" th:text="${author.name}" th:value="${author.id}">&nbsp;</option>
                     </select>
                 </div>
