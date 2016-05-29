@@ -58,9 +58,16 @@
             </div>
             <p>&nbsp;</p>
             <p><a href="#" th:href="@{/manage/book}" class="btn btn-default">All books</a>
-                <a href="#" th:href="@{/manage/book/edit/{bookId}(bookId=${book.id})}" class="btn btn-warning">
-                    <span class="glyphicon glyphicon-pencil"></span> Edit book
-                </a>
+                <span th:if="${getCurrentUser.canWrite(book)}"  >
+                    <a href="#" th:href="@{/manage/book/edit/{bookId}(bookId=${book.id})}" class="btn btn-warning">
+                        <span class="glyphicon glyphicon-pencil"></span> Edit book
+                    </a>
+                </span>
+                <span th:unless="${getCurrentUser.canWrite(book)}"  >
+                   <button th:type="button" class="btn btn-warning disabled">
+                        <span class="glyphicon glyphicon-pencil"></span> Edit book
+                    </button>
+                </span>
             </p>
 
             <div th:replace="fragments/footer :: footer"></div>

@@ -50,9 +50,16 @@
             </div>
             <p>&nbsp;</p>
             <p><a href="#" th:href="@{/manage/author}" class="btn btn-default">All authors</a>
-                <a href="#" th:href="@{/manage/author/edit/{authorId}(authorId=${author.id})}" class="btn btn-warning">
-                    <span class="glyphicon glyphicon-pencil"></span> Edit author
-                </a>
+                <span th:if="${getCurrentUser.canWrite(author)}"  >
+                    <a href="#" th:href="@{/manage/author/edit/{authorId}(authorId=${author.id})}" class="btn btn-warning">
+                        <span class="glyphicon glyphicon-pencil"></span> Edit author
+                    </a>
+                </span>
+                <span th:unless="${getCurrentUser.canWrite(author)}"  >
+                    <button th:type="button" class="btn btn-warning disabled">
+                        <span class="glyphicon glyphicon-pencil"></span> Edit author
+                    </button>
+                </span>
             </p>
 
             <div th:replace="fragments/footer :: footer"></div>
