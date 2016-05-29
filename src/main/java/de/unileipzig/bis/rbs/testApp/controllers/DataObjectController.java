@@ -51,12 +51,6 @@ public class DataObjectController extends AbstractController {
     public String objects(Model model) {
         User user = this.getCurrentUser();
         Iterable<DataObject> allObjects = dataObjectRepository.findAll();
-        List<DataObject> objects = new ArrayList<>();
-        for (DataObject object: allObjects) {
-            if (user.canRead(object)) {
-                objects.add(object);
-            }
-        }
         model.addAttribute("objects", allObjects);
         return "object/all-objects";
     };

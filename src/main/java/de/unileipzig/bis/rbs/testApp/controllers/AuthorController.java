@@ -3,6 +3,7 @@ package de.unileipzig.bis.rbs.testApp.controllers;
 import de.unileipzig.bis.rbs.testApp.model.Author;
 import de.unileipzig.bis.rbs.testApp.model.Role;
 import de.unileipzig.bis.rbs.testApp.model.RoleObject;
+import de.unileipzig.bis.rbs.testApp.model.User;
 import de.unileipzig.bis.rbs.testApp.service.AuthorRepository;
 import de.unileipzig.bis.rbs.testApp.service.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The author controller to manage authors in this application.
@@ -43,7 +42,14 @@ public class AuthorController extends AbstractController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String authors(Model model) {
-        Iterable<Author> authors = authorRepository.findAll();
+        User user = this.getCurrentUser();
+        Iterable<Author> allAuthors = authorRepository.findAll();
+        List<Author> authors = new ArrayList<>();
+        for (Author author : allAuthors) {
+            if (user.canRead(author)) {
+                authors.add(author);
+            }
+        }
         model.addAttribute("authors", authors);
         return "author/all-authors";
     };

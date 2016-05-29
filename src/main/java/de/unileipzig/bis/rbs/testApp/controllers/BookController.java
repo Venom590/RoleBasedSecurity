@@ -3,6 +3,7 @@ package de.unileipzig.bis.rbs.testApp.controllers;
 import de.unileipzig.bis.rbs.testApp.model.Author;
 import de.unileipzig.bis.rbs.testApp.model.Book;
 import de.unileipzig.bis.rbs.testApp.model.Role;
+import de.unileipzig.bis.rbs.testApp.model.User;
 import de.unileipzig.bis.rbs.testApp.service.AuthorRepository;
 import de.unileipzig.bis.rbs.testApp.service.BookRepository;
 import de.unileipzig.bis.rbs.testApp.service.RoleRepository;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The book controller to manage books in this application.
@@ -43,7 +47,14 @@ public class BookController extends AbstractController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String books(Model model) {
-        Iterable<Book> books = bookRepository.findAll();
+        User user = this.getCurrentUser();
+        Iterable<Book> allBooks = bookRepository.findAll();
+        List<Book> books = new ArrayList<>();
+        for (Book book : allBooks) {
+            if (user.canRead(book)) {
+                books.add(book);
+            }
+        }
         model.addAttribute("books", books);
         return "book/all-books";
     };
