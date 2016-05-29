@@ -14,7 +14,7 @@
             <form th:action="@{/manage/object/edit/{objectId}(objectId = ${object.id})}" method="post">
                 <div class="form-group">
                     <label for="nameinput">Name</label>
-                    <input name="name" type="text" class="form-control" id="nameinput" placeholder="Name" th:value="${object.name}" />
+                    <input name="name" type="text" class="form-control" id="nameinput" placeholder="Name" th:value="${object}" />
                 </div>
                 <h2>Roles</h2>
                 <div class="row">

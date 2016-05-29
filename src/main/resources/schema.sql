@@ -1,4 +1,12 @@
 -- noinspection SqlNoDataSourceInspectionForFile
+DROP TABLE IF EXISTS rbs_roles;
+DROP TABLE IF EXISTS rbs_users;
+DROP TABLE IF EXISTS rbs_objects;
+DROP TABLE IF EXISTS rbs_authors;
+DROP TABLE IF EXISTS rbs_books;
+DROP TABLE IF EXISTS rbs_users_roles;
+DROP TABLE IF EXISTS rbs_roles_objects;
+
 CREATE TABLE rbs_roles (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   parent_id INT NULL,
@@ -17,7 +25,21 @@ CREATE TABLE rbs_users (
 
 CREATE TABLE rbs_objects (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+--  table_object_id INT NOT NULL,  for real global id a local table id has to be referenced
+  table_name VARCHAR(255) NOT NULL,
+);
+
+CREATE TABLE rbs_authors (
+  id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE rbs_books (
+  id INT NOT NULL AUTO_INCREMENT,
+  isbn VARCHAR(255) NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  author_id INT NULL,
+  FOREIGN KEY (author_id) REFERENCES rbs_authors(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE rbs_users_roles (

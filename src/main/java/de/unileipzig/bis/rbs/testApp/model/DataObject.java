@@ -10,6 +10,8 @@ import java.util.Set;
  * @author Stephan Kemper
  */
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "table_name")
 @Table(name="rbs_objects")
 public class DataObject {
 
@@ -18,13 +20,8 @@ public class DataObject {
      */
     @Id
     @GeneratedValue
-    private Long id;
-
-    /**
-     * DataObject name
-     */
-    @Column
-    private String name;
+    @Column(name = "id")
+    protected Long id;
 
     /**
      * Roles
@@ -46,33 +43,10 @@ public class DataObject {
     public DataObject() { }
 
     /**
-     * Data constructor
-     *
-     * @param name the name
-     */
-    public DataObject(String name) {
-        this.name = name;
-    }
-
-    /**
      * @return the id
      */
     public Long getId() {
         return id;
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -115,6 +89,6 @@ public class DataObject {
 
     @Override
     public String toString() {
-        return String.format("DataObject [id=%d, name=%s]", id, name);
+        return String.format("DataObject [id=%d]", id);
     }
 }

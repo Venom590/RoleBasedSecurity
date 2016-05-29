@@ -45,7 +45,7 @@
                             </thead>
                             <tbody>
                                 <tr th:each="object : ${objects}">
-                                    <td th:text="${object.name}">&nbsp;</td>
+                                    <td th:text="${object}">&nbsp;</td>
                                     <td class="text-center">
                                         <input type="checkbox" name="can_read[]" th:value="${object.id}" th:checked="${role.canRead(object)}" />
                                     </td>

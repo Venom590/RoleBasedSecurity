@@ -43,7 +43,7 @@
                         </thead>
                         <tbody>
                             <tr th:each="roleObject : ${role.roleObjects}">
-                                <td><a th:href="@{/manage/object/{objectId}(objectId=${roleObject.object.id})}" th:text="${roleObject.object.name}">&nbsp;</a></td>
+                                <td><a th:href="@{/manage/object/{objectId}(objectId=${roleObject.object.id})}" th:text="${roleObject.object}">&nbsp;</a></td>
                                 <td class="text-center">
                                     <span th:class="${roleObject.canRead} ? 'text-success glyphicon glyphicon-ok' : 'text-danger glyphicon glyphicon-remove'"></span>
                                 </td>

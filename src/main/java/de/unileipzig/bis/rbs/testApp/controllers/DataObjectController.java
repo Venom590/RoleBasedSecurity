@@ -83,15 +83,13 @@ public class DataObjectController extends AbstractController {
     /**
      * Create new object (action)
      *
-     * @param name the name
      * @return the view (redirect)
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String doCreate(@RequestParam(value = "name", required = false) String name,
-                           @RequestParam(value = "can_read[]", required = false) Long[] canReadRoleIds,
+    public String doCreate(@RequestParam(value = "can_read[]", required = false) Long[] canReadRoleIds,
                            @RequestParam(value = "can_write[]", required = false) Long[] canWriteRoleIds,
                            @RequestParam(value = "can_delete[]", required = false) Long[] canDeleteRoleIds) {
-        DataObject object = new DataObject(name);
+        DataObject object = new DataObject();
         HashMap<String, Long[]> idCollection = new HashMap<>();
         idCollection.put("can_read", canReadRoleIds);
         idCollection.put("can_write", canWriteRoleIds);
@@ -148,17 +146,14 @@ public class DataObjectController extends AbstractController {
      * Edit existing object (action)
      *
      * @param objectid the object id
-     * @param name the new name
      * @return the view (redirect)
      */
     @RequestMapping(value = "/edit/{objectid}", method = RequestMethod.POST)
     public String doEdit(@PathVariable String objectid,
-                         @RequestParam(value = "name", required = false) String name,
                          @RequestParam(value = "can_read[]", required = false) Long[] canReadRoleIds,
                          @RequestParam(value = "can_write[]", required = false) Long[] canWriteRoleIds,
                          @RequestParam(value = "can_delete[]", required = false) Long[] canDeleteRoleIds) {
         DataObject object = dataObjectRepository.findOne(Long.valueOf(objectid));
-        object.setName(name);
         HashMap<String, Long[]> idCollection = new HashMap<>();
         idCollection.put("can_read", canReadRoleIds);
         idCollection.put("can_write", canWriteRoleIds);
