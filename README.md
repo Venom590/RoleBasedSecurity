@@ -17,18 +17,18 @@ as Maven takes care about them.
 
 
 ## Build
-- Using a terminal
- - Navigate to the root directory of this project
- - Execute `mvn install -DskipTests` to build jars
- - Now a jar-file was created, you can simply run it via
+- Using the terminal
+    - Navigate to the root directory of this project
+    - Execute `mvn install -DskipTests` to build jars
+    - Now a jar-file was created, you can simply run it via
  `java -jar /target/role-base-security-X-Y.jar` where 'X' and 'Y' represent the version you are using
-- Using a IDE
- - Switch to the default run configurations, if you changed them
- - Rightclick 'TestApp.java' at 'de.unileipzig.bis.rbs.testApp' and then 'Run TestApp.main()'
+- Using an IDE
+    - Open the class de.unileipzig.bis.rbs.testApp.TestApp
+    - Start the main method of this class (way of doing that depends on the IDE you're using)
 
 ## Database
-As mentioned before a H2 database is used. The automatically read database schema is located at
-'root/src/main/resources/schema.sql' and creates 5 base tables which are necessary for this project.
+As mentioned before a H2 database is used. The automatically applied database schema file is located at
+'/src/main/resources/schema.sql' and defines 5 base tables which are necessary for this project.
 - rbs_roles, which contains information about the roles used
 - rbs_users, where basic user information is stored
 - rbs_objects, here are global IDs for all objects, created by custom tables, stored
@@ -36,20 +36,20 @@ As mentioned before a H2 database is used. The automatically read database schem
 - rbs_roles_objects, same as previous but with objects and contains additional information about the
 rights a role has for an object
 
+There is a data file for test data as well. It is located at '/src/main/resources/data.sql'.
+
 
 ## Test
 - Use your favorite tool to execute [JUnit](http://junit.org/junit4/) tests or
-simply execute `mvn test` command to unit test the application's methods.
+simply execute `mvn test` command to unit test the application.
 
 
 ## Test App
 The core functionality of this project is demonstrated with a test application which is basically a
-Spring Web application using the provided API of this project.
+Spring web application using the provided API of this project.
 Please consider, that the embedded database in this test app is an in-memory database,
 which means, that you should not use important data in this app unless you change
 the underlying data source to any persistant one.
-As an example we added some test tables to the schema and some test data which is also read automatically
-into the database.
 
 ## Custom expansions
 If you want to add your own tables you simply have to have an 'AUTO_INCREMENT' integer 'id' column and
@@ -59,6 +59,14 @@ primary key join column with 'id' as name. To use this model you can create a co
 for the  test app, which extends 'de.unileipzig.bis.rbs.testApp.controllers.AbstractController'.
 
 ## Release Notes
+
+### v0.3 (2016-05-31)
+- Beautified and extended this readme file
+- Created views to show rights for objects to a logged in user
+- Extended manage views and controllers to only grant read/write/delete access with adequate rights
+- Updated database model and test data
+- Created association (is-a-relation) between object types (e.g. Author/Book) and global object identifiers
+- Extended views and controllers for user <-> role and role <-> object association
 
 ### v0.2 (2016-05-17)
 - Created custom error page
