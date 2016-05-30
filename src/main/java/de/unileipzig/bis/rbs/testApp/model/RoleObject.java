@@ -74,6 +74,12 @@ public class RoleObject implements Serializable {
         this.canDelete = canDelete;
     }
 
+    public boolean hasMoreRightsThan(RoleObject roleObject) {
+        return (getCanRead() && !roleObject.getCanRead())
+                || (getCanWrite() && !roleObject.getCanWrite())
+                || (getCanDelete() && !roleObject.getCanDelete());
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

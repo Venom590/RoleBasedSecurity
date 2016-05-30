@@ -118,11 +118,11 @@ public abstract class AbstractController {
                         roleObject.setObject(dataObjectRepository.findOne(objectId));
                     }
                     setRoleObjectRight(roleObject, rightString);
-                    checkRoleObjectConsistency(roleObject);
                     roleObjects.put(objectId, roleObject);
                 }
             }
         }
+        checkRoleObjectConsistency(roleObjects.values());
         role.getRoleObjects().clear();
         role.getRoleObjects().addAll(new HashSet<>(roleObjects.values()));
     }
@@ -145,27 +145,22 @@ public abstract class AbstractController {
                         roleObject.setRole(roleRepository.findOne(roleId));
                     }
                     setRoleObjectRight(roleObject, rightString);
-                    checkRoleObjectConsistency(roleObject);
                     roleObjects.put(roleId, roleObject);
                 }
             }
         }
+        checkRoleObjectConsistency(roleObjects.values());
         object.getRoleObjects().clear();
         object.getRoleObjects().addAll(new HashSet<>(roleObjects.values()));
     }
 
-    private void checkRoleObjectConsistency(RoleObject roleObject) throws RoleObjectConsistencyException {
-        Role role = roleObject.getRole();
-        Set<Role> ascendants = role.findAscendants();
-        for (Role r: ascendants) {
-            if (roleHasMoreRightsThanAscendant(r, role, roleObject.getObject())) {
+    private void checkRoleObjectConsistency(Collection<RoleObject> roleObjects) throws RoleObjectConsistencyException {
+        for (RoleObject roleObject: roleObjects) {
+            Role role = roleObject.getRole();
+            if (role.hasMoreRightsThanAscendants(roleObject) || role.hasLessRightsThanDescendants(roleObject)) {
                 throw new RoleObjectConsistencyException();
             }
         }
-    }
-
-    private boolean roleHasMoreRightsThanAscendant(Role ascendant, Role role, DataObject object) {
-        return false;
     }
 
     @ModelAttribute("hintMessage")

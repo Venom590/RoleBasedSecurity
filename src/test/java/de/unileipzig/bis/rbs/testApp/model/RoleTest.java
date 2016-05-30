@@ -53,23 +53,23 @@ public class RoleTest {
     @Test
     public void findDescendants() throws Exception {
         Assert.assertEquals(root.findDescendants(), roles);
-        Assert.assertEquals(node1.findDescendants(), new HashSet<>(Arrays.asList(node1, node3, node4)));
-        Assert.assertEquals(node2.findDescendants(), new HashSet<>(Arrays.asList(node2, node5, node6)));
-        Assert.assertEquals(node3.findDescendants(), new HashSet<>(Arrays.asList(node3)));
-        Assert.assertEquals(node4.findDescendants(), new HashSet<>(Arrays.asList(node4)));
-        Assert.assertEquals(node5.findDescendants(), new HashSet<>(Arrays.asList(node5)));
-        Assert.assertEquals(node6.findDescendants(), new HashSet<>(Arrays.asList(node6)));
+        Assert.assertEquals(node1.findDescendants(), new HashSet<>(Arrays.asList(node3, node4)));
+        Assert.assertEquals(node2.findDescendants(), new HashSet<>(Arrays.asList(node5, node6)));
+        Assert.assertEquals(node3.findDescendants(), new HashSet<>());
+        Assert.assertEquals(node4.findDescendants(), new HashSet<>());
+        Assert.assertEquals(node5.findDescendants(), new HashSet<>());
+        Assert.assertEquals(node6.findDescendants(), new HashSet<>());
     }
 
     @Test
     public void findAscendants() throws Exception {
-        Assert.assertEquals(root.findAscendants(), new HashSet<>(Arrays.asList(root)));
-        Assert.assertEquals(node1.findAscendants(), new HashSet<>(Arrays.asList(root, node1)));
-        Assert.assertEquals(node2.findAscendants(), new HashSet<>(Arrays.asList(root, node2)));
-        Assert.assertEquals(node3.findAscendants(), new HashSet<>(Arrays.asList(root, node1, node3)));
-        Assert.assertEquals(node4.findAscendants(), new HashSet<>(Arrays.asList(root, node1, node4)));
-        Assert.assertEquals(node5.findAscendants(), new HashSet<>(Arrays.asList(root, node2, node5)));
-        Assert.assertEquals(node6.findAscendants(), new HashSet<>(Arrays.asList(root, node2, node6)));
+        Assert.assertEquals(root.findAscendants(), new HashSet<>(Arrays.asList()));
+        Assert.assertEquals(node1.findAscendants(), new HashSet<>(Arrays.asList(root)));
+        Assert.assertEquals(node2.findAscendants(), new HashSet<>(Arrays.asList(root)));
+        Assert.assertEquals(node3.findAscendants(), new HashSet<>(Arrays.asList(root, node1)));
+        Assert.assertEquals(node4.findAscendants(), new HashSet<>(Arrays.asList(root, node1)));
+        Assert.assertEquals(node5.findAscendants(), new HashSet<>(Arrays.asList(root, node2)));
+        Assert.assertEquals(node6.findAscendants(), new HashSet<>(Arrays.asList(root, node2)));
     }
 
 }

@@ -263,7 +263,6 @@ public class Role {
      */
     public Set<Role> findDescendants() {
         Set<Role> descendants = new HashSet<>();
-        descendants.add(this);
         findDescendants(descendants);
         return descendants;
     }
@@ -287,9 +286,38 @@ public class Role {
      */
     public Set<Role> findAscendants() {
         Set<Role> ascendants = new HashSet<>();
-        ascendants.add(this);
         findAscendants(ascendants);
         return ascendants;
+    }
+
+    public boolean hasMoreRightsThanAscendants(RoleObject roleObject) {
+        DataObject object = roleObject.getObject();
+        Set<Role> ascendants = findAscendants();
+        for (Role ascendant: ascendants) {
+            Set<RoleObject> ascendantRoleObjects = ascendant.getRoleObjects();
+            for (RoleObject ascendantRoleObject: ascendantRoleObjects) {
+                DataObject ascendantObject = ascendantRoleObject.getObject();
+                if (ascendantObject.equals(object) && roleObject.hasMoreRightsThan(ascendantRoleObject)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean hasLessRightsThanDescendants(RoleObject roleObject) {
+        DataObject object = roleObject.getObject();
+        Set<Role> descendants = findDescendants();
+        for (Role descendant: descendants) {
+            Set<RoleObject> descendantRoleObjects = descendant.getRoleObjects();
+            for (RoleObject descendantRoleObject: descendantRoleObjects) {
+                DataObject descendantObject = descendantRoleObject.getObject();
+                if (descendantObject.equals(object) && descendantRoleObject.hasMoreRightsThan(roleObject)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
