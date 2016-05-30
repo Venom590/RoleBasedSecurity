@@ -192,6 +192,9 @@ public class RoleController extends AbstractController {
         Role role = roleRepository.findOne(Long.valueOf(roleid));
         if (parentId != null && parentId != 0) {
             Role parentRole = roleRepository.findOne(parentId);
+            if (parentRole.findAscendants().contains(role)) {
+                return "redirect:/manage/role/edit/" + roleid;
+            }
             role.setParentRole(parentRole);
         } else {
             role.setParentRole(null);

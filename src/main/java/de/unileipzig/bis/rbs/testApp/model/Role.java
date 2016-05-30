@@ -4,12 +4,14 @@ package de.unileipzig.bis.rbs.testApp.model;
 import org.hibernate.annotations.Check;
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
  * Role database entity model.
  *
  * @author Stephan Kemper
+ * @author Lukas Werner
  */
 @Entity
 @Table(name="rbs_roles")
@@ -33,8 +35,8 @@ public class Role {
     /**
      * Set of roles of children
      */
-    @OneToMany(mappedBy="parentRole")
-    private Set<Role> childrenRoles = new HashSet<>(0);
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentRole")
+    private Set<Role> childRoles = new HashSet<>(0);
 
     /**
      * Name
@@ -84,6 +86,19 @@ public class Role {
     }
 
     /**
+     * Constructor with id for test purposes
+     *
+     * @param id the id
+     * @param parentRole the parent role
+     * @param name the name
+     */
+    public Role(Long id, String name, Role parentRole) {
+        this.id = id;
+        this.parentRole = parentRole;
+        this.name = name;
+    }
+
+    /**
      * @return the id
      */
     public Long getId() {
@@ -108,15 +123,15 @@ public class Role {
     /**
      * @return set of the child role objects
      */
-    public Set<Role> getChildrenRoles() {
-        return childrenRoles;
+    public Set<Role> getChildRoles() {
+        return childRoles;
     }
 
     /**
-     * @param childrenRoles set the child role objects
+     * @param childRoles set the child role objects
      */
-    public void setChildrenRoles(Set<Role> childrenRoles) {
-        this.childrenRoles = childrenRoles;
+    public void setChildRoles(Set<Role> childRoles) {
+        this.childRoles = childRoles;
     }
 
     /**
@@ -215,6 +230,68 @@ public class Role {
         return false;
     }
 
+    /**
+     * Find the root in this role tree (can be the role itself)
+     *
+     * @return the root role
+     */
+    public Role findRoot() {
+        if (parentRole != null) {
+            return parentRole.findRoot();
+        }
+        return this;
+    }
+
+    /**
+     * Recursive method to actually find the descendants
+     *
+     * @param descendants the Set of roles to collect the descendants
+     */
+    private void findDescendants(Set<Role> descendants) {
+        if (childRoles != null) {
+            descendants.addAll(childRoles);
+            for (Role r : childRoles) {
+                r.findDescendants(descendants);
+            }
+        }
+    }
+
+    /**
+     * Find all descendants of this role including itself
+     *
+     * @return the descendants of this role
+     */
+    public Set<Role> findDescendants() {
+        Set<Role> descendants = new HashSet<>();
+        descendants.add(this);
+        findDescendants(descendants);
+        return descendants;
+    }
+
+    /**
+     * Recursive method to actually find the ascendants
+     *
+     * @param ascendants the Set of roles to collect the ascendants
+     */
+    private void findAscendants(Set<Role> ascendants) {
+        if (parentRole != null) {
+            ascendants.add(parentRole);
+            parentRole.findAscendants(ascendants);
+        }
+    }
+
+    /**
+     * Find all ascendants of this role including itself
+     *
+     * @return the ascendants of this role
+     */
+    public Set<Role> findAscendants() {
+        Set<Role> ascendants = new HashSet<>();
+        ascendants.add(this);
+        findAscendants(ascendants);
+        return ascendants;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -233,6 +310,6 @@ public class Role {
 
     @Override
     public String toString() {
-        return String.format("Role [id=%d, parent_id=%s, name=%s]", id, parentRole, name);
+        return String.format("Role [id=%d, parent=%s, name=%s]", id, parentRole, name);
     }
 }
