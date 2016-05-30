@@ -147,13 +147,17 @@ public class BookController extends AbstractController {
                          @RequestParam(value = "can_write[]", required = false) Long[] canWriteRoleIds,
                          @RequestParam(value = "can_delete[]", required = false) Long[] canDeleteRoleIds) {
         Book book = bookRepository.findOne(Long.valueOf(bookid));
-        Author author = authorRepository.findOne(Long.valueOf(authorId));
-        book.setIsbn(isbn);
-        book.setTitle(title);
-        book.setAuthor(author);
-        this.setRoleObjectsToObject(book, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
+        if (this.getCurrentUser().canWrite(book)) {
+            Author author = authorRepository.findOne(Long.valueOf(authorId));
+            book.setIsbn(isbn);
+            book.setTitle(title);
+            book.setAuthor(author);
+            this.setRoleObjectsToObject(book, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
 
-        bookRepository.save(book);
+            bookRepository.save(book);
+        } else {
+            this.setHintMessage("You do not have write rights for object with id: " + bookid);
+        }
         return "redirect:/manage/book/" + bookid;
     }
 

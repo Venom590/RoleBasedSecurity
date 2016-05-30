@@ -30,6 +30,8 @@ public abstract class AbstractController {
     @Autowired
     private RoleRepository roleRepository;
 
+    private String hintMessage = "";
+
     /**
      * Obtains the currently authenticated principal, or an authentication request token.
      *
@@ -115,6 +117,17 @@ public abstract class AbstractController {
         }
         object.getRoleObjects().clear();
         object.getRoleObjects().addAll(new HashSet<>(roleObjects.values()));
+    }
+
+    @ModelAttribute("hintMessage")
+    public String getHintMessage() {
+        String message = this.hintMessage;
+        this.hintMessage = "";
+        return message;
+    }
+
+    protected void setHintMessage(String hintMessage) {
+        this.hintMessage = hintMessage;
     }
 
 }
