@@ -1,5 +1,6 @@
 package de.unileipzig.bis.rbs.testApp.controllers;
 
+import de.unileipzig.bis.rbs.testApp.RoleObjectConsistencyException;
 import de.unileipzig.bis.rbs.testApp.model.Author;
 import de.unileipzig.bis.rbs.testApp.model.Book;
 import de.unileipzig.bis.rbs.testApp.model.Role;
@@ -36,9 +37,6 @@ public class BookController extends AbstractController {
     @Autowired
     private AuthorRepository authorRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
-
     /**
      * Get all books
      *
@@ -69,8 +67,13 @@ public class BookController extends AbstractController {
     @RequestMapping(value = "/{bookid}", method = RequestMethod.GET)
     public String book(@PathVariable String bookid, Model model) {
         Book book = bookRepository.findOne(Long.valueOf(bookid));
-        model.addAttribute("book", book);
-        return "book/book";
+        if (canRead(book)) {
+            model.addAttribute("book", book);
+            return "book/book";
+        } else {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have read rights for object with id: " + bookid));
+            return "redirect:/manage/book";
+        }
     }
 
     /**
@@ -80,11 +83,16 @@ public class BookController extends AbstractController {
      */
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model) {
-        Iterable<Author> allAuthors = authorRepository.findAll();
-        model.addAttribute("authors", allAuthors);
-        Iterable<Role> roles = roleRepository.findAll();
-        model.addAttribute("roles", roles);
-        return "book/create";
+        if (isAdmin()) {
+            Iterable<Author> allAuthors = authorRepository.findAll();
+            model.addAttribute("authors", allAuthors);
+            Iterable<Role> roles = roleRepository.findAll();
+            model.addAttribute("roles", roles);
+            return "book/create";
+        } else {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have create rights for objects here"));
+            return "redirect:/manage/book";
+        }
     }
 
     /**
@@ -102,12 +110,19 @@ public class BookController extends AbstractController {
                            @RequestParam(value = "can_read[]", required = false) Long[] canReadRoleIds,
                            @RequestParam(value = "can_write[]", required = false) Long[] canWriteRoleIds,
                            @RequestParam(value = "can_delete[]", required = false) Long[] canDeleteRoleIds) {
+        if (isAdmin()) {
+            Author author = authorRepository.findOne(Long.valueOf(authorId));
+            Book book = new Book(isbn, title, author);
+            try {
+                this.setRoleObjectsToObject(book, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
 
-        Author author = authorRepository.findOne(Long.valueOf(authorId));
-        Book book = new Book(isbn, title, author);
-        this.setRoleObjectsToObject(book, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
-
-        bookRepository.save(book);
+                bookRepository.save(book);
+            } catch (RoleObjectConsistencyException e) {
+                setHintMessage(new HintMessage(HintMessage.HintStatus.danger, e.getMessage()));
+            }
+        } else {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have create rights for objects here"));
+        }
         return "redirect:/manage/book";
     }
 
@@ -121,12 +136,17 @@ public class BookController extends AbstractController {
     @RequestMapping(value = "/edit/{bookid}", method = RequestMethod.GET)
     public String edit(@PathVariable String bookid, Model model) {
         Book book = bookRepository.findOne(Long.valueOf(bookid));
-        model.addAttribute("book", book);
-        Iterable<Author> allAuthors = authorRepository.findAll();
-        model.addAttribute("authors", allAuthors);
-        Iterable<Role> roles = roleRepository.findAll();
-        model.addAttribute("roles", roles);
-        return "book/edit";
+        if (canWrite(book)) {
+            model.addAttribute("book", book);
+            Iterable<Author> allAuthors = authorRepository.findAll();
+            model.addAttribute("authors", allAuthors);
+            Iterable<Role> roles = roleRepository.findAll();
+            model.addAttribute("roles", roles);
+            return "book/edit";
+        } else {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have write rights for object with id: " + bookid));
+            return "redirect:/manage/book";
+        }
     }
 
     /**
@@ -147,16 +167,20 @@ public class BookController extends AbstractController {
                          @RequestParam(value = "can_write[]", required = false) Long[] canWriteRoleIds,
                          @RequestParam(value = "can_delete[]", required = false) Long[] canDeleteRoleIds) {
         Book book = bookRepository.findOne(Long.valueOf(bookid));
-        if (this.getCurrentUser().canWrite(book)) {
+        if (canWrite(book)) {
             Author author = authorRepository.findOne(Long.valueOf(authorId));
             book.setIsbn(isbn);
             book.setTitle(title);
             book.setAuthor(author);
-            this.setRoleObjectsToObject(book, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
+            try {
+                this.setRoleObjectsToObject(book, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
 
-            bookRepository.save(book);
+                bookRepository.save(book);
+            } catch (RoleObjectConsistencyException e) {
+                setHintMessage(new HintMessage(HintMessage.HintStatus.danger, e.getMessage()));
+            }
         } else {
-            this.setHintMessage("You do not have write rights for object with id: " + bookid);
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have write rights for object with id: " + bookid));
         }
         return "redirect:/manage/book/" + bookid;
     }
@@ -169,7 +193,11 @@ public class BookController extends AbstractController {
      */
     @RequestMapping(value = "/delete/{bookid}", method = RequestMethod.GET)
     public String delete(@PathVariable String bookid) {
-        bookRepository.delete(Long.valueOf(bookid));
+        if (canDelete(Long.valueOf(bookid))) {
+            bookRepository.delete(Long.valueOf(bookid));
+        } else {
+            this.setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have delete rights for object with id: " + bookid));
+        }
         return "redirect:/manage/book";
     }
 

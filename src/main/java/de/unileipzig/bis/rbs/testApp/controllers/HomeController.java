@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class HomeController extends AbstractController {
 
-    @Autowired
-    private UserRepository userRepository;
-
     /**
      * Main entry point (home)
      *

@@ -26,18 +26,6 @@ import java.util.Set;
 public class UserController extends AbstractController {
 
     /**
-     * The user repository to persist changes
-     */
-    @Autowired
-    private UserRepository userRepository;
-
-    /**
-     * The role repository
-     */
-    @Autowired
-    private RoleRepository roleRepository;
-
-    /**
      * Get all users
      *
      * @param model the ui model

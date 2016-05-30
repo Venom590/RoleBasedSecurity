@@ -5,41 +5,48 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     </head>
     <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" th:fragment="nav">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/">RoleBasedSecurity</a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li th:unless="${isLogged}"  >
-                            <li><a href="#" th:href="@{/login}">Sign in</a></li>
-                        </li>
-                        <li th:if="${isLogged}"  >
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"> Manage <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li th:if="${isAdmin}"  >
-                                        <li><a href="#" th:href="@{/manage/user}">Users (restricted)</a></li>
-                                        <li><a href="#" th:href="@{/manage/role}">Roles (restricted)</a></li>
-                                    </li>
-                                        <li><a href="#" th:href="@{/manage/object/myobjects}">My Objects</a></li>
-                                        <li><a href="#" th:href="@{/manage/object}">All Objects</a></li>
-                                    <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"> Manage Objects <span class="caret"></span></a>
-                                    <ul class="dropdown-menu"> -->
-                                        <li><a href="#" th:href="@{/manage/book}">Books</a></li>
-                                        <li><a href="#" th:href="@{/manage/author}">Authors</a></li>
-
-                                    <!-- </ul> -->
-                                </ul>
-
+        <div th:fragment="nav">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="/">RoleBasedSecurity</a>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li th:unless="${isLogged}"  >
+                                <li><a href="#" th:href="@{/login}">Sign in</a></li>
                             </li>
+                            <li th:if="${isLogged}"  >
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"> Manage <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li th:if="${isAdmin}"  >
+                                            <li><a href="#" th:href="@{/manage/user}">Users (restricted)</a></li>
+                                            <li><a href="#" th:href="@{/manage/role}">Roles (restricted)</a></li>
+                                        </li>
+                                            <li><a href="#" th:href="@{/manage/object/myobjects}">My Objects</a></li>
+                                            <li><a href="#" th:href="@{/manage/object}">All Objects</a></li>
+                                        <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"> Manage Objects <span class="caret"></span></a>
+                                        <ul class="dropdown-menu"> -->
+                                            <li><a href="#" th:href="@{/manage/book}">Books</a></li>
+                                            <li><a href="#" th:href="@{/manage/author}">Authors</a></li>
 
-                            <li><a href="#" th:href="@{/logout}">Sign out</a></li>
-                        </li>
-                    </ul>
+                                        <!-- </ul> -->
+                                    </ul>
+
+                                </li>
+
+                                <li><a href="#" th:href="@{/logout}">Sign out</a></li>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="container" style="margin-top: 50px;">
+                <div th:if="${hintMessage != null}">
+                    <div th:class="'alert alert-' + ${hintMessage.status}" class="alert alert-danger" th:text="${hintMessage}" style="margin: 0;">&nbsp;</div>
                 </div>
             </div>
-        </nav>
+        </div>
     </body>
 </html>

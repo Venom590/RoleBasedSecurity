@@ -1,5 +1,8 @@
 package de.unileipzig.bis.rbs.testApp.model;
 
+import de.unileipzig.bis.rbs.testApp.service.DataObjectRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;

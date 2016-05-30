@@ -1,5 +1,6 @@
 package de.unileipzig.bis.rbs.testApp.controllers;
 
+import de.unileipzig.bis.rbs.testApp.RoleObjectConsistencyException;
 import de.unileipzig.bis.rbs.testApp.model.Author;
 import de.unileipzig.bis.rbs.testApp.model.Role;
 import de.unileipzig.bis.rbs.testApp.model.RoleObject;
@@ -31,9 +32,6 @@ public class AuthorController extends AbstractController {
     @Autowired
     private AuthorRepository authorRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
-
     /**
      * Get all authors
      *
@@ -64,8 +62,13 @@ public class AuthorController extends AbstractController {
     @RequestMapping(value = "/{authorid}", method = RequestMethod.GET)
     public String author(@PathVariable String authorid, Model model) {
         Author author = authorRepository.findOne(Long.valueOf(authorid));
-        model.addAttribute("author", author);
-        return "author/author";
+        if (canRead(author)) {
+            model.addAttribute("author", author);
+            return "author/author";
+        } else {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have read rights for object with id: " + authorid));
+            return "redirect:/manage/author";
+        }
     }
 
     /**
@@ -75,9 +78,14 @@ public class AuthorController extends AbstractController {
      */
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model) {
-        Iterable<Role> roles = roleRepository.findAll();
-        model.addAttribute("roles", roles);
-        return "author/create";
+        if (isAdmin()) {
+            Iterable<Role> roles = roleRepository.findAll();
+            model.addAttribute("roles", roles);
+            return "author/create";
+        } else {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have read rights for objects here."));
+            return "redirect:/manage/author";
+        }
     }
 
     /**
@@ -91,10 +99,17 @@ public class AuthorController extends AbstractController {
                            @RequestParam(value = "can_read[]", required = false) Long[] canReadRoleIds,
                            @RequestParam(value = "can_write[]", required = false) Long[] canWriteRoleIds,
                            @RequestParam(value = "can_delete[]", required = false) Long[] canDeleteRoleIds) {
-        Author author = new Author(name);
-        this.setRoleObjectsToObject(author, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
-
-        authorRepository.save(author);
+        if (isAdmin()) {
+            Author author = new Author(name);
+            try {
+                this.setRoleObjectsToObject(author, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
+                authorRepository.save(author);
+            } catch (RoleObjectConsistencyException e) {
+                setHintMessage(new HintMessage(HintMessage.HintStatus.danger, e.getMessage()));
+            }
+        } else {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have read rights for objects here."));
+        }
         return "redirect:/manage/author";
     }
 
@@ -108,10 +123,15 @@ public class AuthorController extends AbstractController {
     @RequestMapping(value = "/edit/{authorid}", method = RequestMethod.GET)
     public String edit(@PathVariable String authorid, Model model) {
         Author author = authorRepository.findOne(Long.valueOf(authorid));
-        model.addAttribute("author", author);
-        Iterable<Role> roles = roleRepository.findAll();
-        model.addAttribute("roles", roles);
-        return "author/edit";
+        if (canWrite(author)) {
+            model.addAttribute("author", author);
+            Iterable<Role> roles = roleRepository.findAll();
+            model.addAttribute("roles", roles);
+            return "author/edit";
+        } else {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have write rights for object with id: " + authorid));
+            return "redirect:/manage/author";
+        }
     }
 
     /**
@@ -128,15 +148,20 @@ public class AuthorController extends AbstractController {
                          @RequestParam(value = "can_write[]", required = false) Long[] canWriteRoleIds,
                          @RequestParam(value = "can_delete[]", required = false) Long[] canDeleteRoleIds) {
         Author author = authorRepository.findOne(Long.valueOf(authorid));
-        if (this.getCurrentUser().canWrite(author)) {
+        if (canWrite(author)) {
             author.setName(name);
-            this.setRoleObjectsToObject(author, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
+            try {
+                setRoleObjectsToObject(author, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
+                authorRepository.save(author);
+            } catch (RoleObjectConsistencyException e) {
+                setHintMessage(new HintMessage(HintMessage.HintStatus.danger, e.getMessage()));
+            }
 
-            authorRepository.save(author);
+            return "redirect:/manage/author/" + authorid;
         } else {
-            this.setHintMessage("You do not have write rights for object with id: " + authorid);
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have write rights for object with id: " + authorid));
+            return "redirect:/manage/author";
         }
-        return "redirect:/manage/author/" + authorid;
     }
 
     /**
@@ -147,7 +172,11 @@ public class AuthorController extends AbstractController {
      */
     @RequestMapping(value = "/delete/{authorid}", method = RequestMethod.GET)
     public String delete(@PathVariable String authorid) {
-        authorRepository.delete(Long.valueOf(authorid));
+        if (canDelete(Long.valueOf(authorid))) {
+            authorRepository.delete(Long.valueOf(authorid));
+        } else {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have delete rights for object with id: " + authorid));
+        }
         return "redirect:/manage/author";
     }
 

@@ -1,5 +1,6 @@
 package de.unileipzig.bis.rbs.testApp.controllers;
 
+import de.unileipzig.bis.rbs.testApp.RoleObjectConsistencyException;
 import de.unileipzig.bis.rbs.testApp.model.DataObject;
 import de.unileipzig.bis.rbs.testApp.model.Role;
 import de.unileipzig.bis.rbs.testApp.model.RoleObject;
@@ -25,18 +26,6 @@ import java.util.*;
 @Controller
 @RequestMapping("/manage/object")
 public class DataObjectController extends AbstractController {
-
-    /**
-     * The object repository to persist changes
-     */
-    @Autowired
-    private DataObjectRepository dataObjectRepository;
-
-    /**
-     * The role repository
-     */
-    @Autowired
-    private RoleRepository roleRepository;
 
     @Autowired
     private RoleObjectRepository roleObjectRepository;
@@ -113,39 +102,12 @@ public class DataObjectController extends AbstractController {
                            @RequestParam(value = "can_write[]", required = false) Long[] canWriteRoleIds,
                            @RequestParam(value = "can_delete[]", required = false) Long[] canDeleteRoleIds) {
         DataObject object = new DataObject();
-        HashMap<String, Long[]> idCollection = new HashMap<>();
-        idCollection.put("can_read", canReadRoleIds);
-        idCollection.put("can_write", canWriteRoleIds);
-        idCollection.put("can_delete", canDeleteRoleIds);
-        HashMap<Long, RoleObject> roleObjects = new HashMap<>();
-        for (Map.Entry<String, Long[]> entry: idCollection.entrySet()) {
-            String rightString = entry.getKey();
-            Long[] roleIds = entry.getValue();
-            if (roleIds != null) {
-                for (Long roleId : roleIds) {
-                    RoleObject roleObject = roleObjects.get(roleId);
-                    if (roleObject == null) {
-                        roleObject = new RoleObject();
-                        roleObject.setObject(object);
-                        roleObject.setRole(roleRepository.findOne(roleId));
-                    }
-                    switch (rightString) {
-                        case "can_read":
-                            roleObject.setCanRead(true);
-                            break;
-                        case "can_write":
-                            roleObject.setCanWrite(true);
-                            break;
-                        case "can_delete":
-                            roleObject.setCanDelete(true);
-                            break;
-                    }
-                    roleObjects.put(roleId, roleObject);
-                }
-            }
+        try {
+            setRoleObjectsToObject(object, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
+            dataObjectRepository.save(object);
+        } catch (RoleObjectConsistencyException e) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, e.getMessage()));
         }
-        object.getRoleObjects().addAll(new HashSet<>(roleObjects.values()));
-        dataObjectRepository.save(object);
         return "redirect:/manage/object";
     }
 
@@ -177,40 +139,12 @@ public class DataObjectController extends AbstractController {
                          @RequestParam(value = "can_write[]", required = false) Long[] canWriteRoleIds,
                          @RequestParam(value = "can_delete[]", required = false) Long[] canDeleteRoleIds) {
         DataObject object = dataObjectRepository.findOne(Long.valueOf(objectid));
-        HashMap<String, Long[]> idCollection = new HashMap<>();
-        idCollection.put("can_read", canReadRoleIds);
-        idCollection.put("can_write", canWriteRoleIds);
-        idCollection.put("can_delete", canDeleteRoleIds);
-        HashMap<Long, RoleObject> roleObjects = new HashMap<>();
-        for (Map.Entry<String, Long[]> entry: idCollection.entrySet()) {
-            String rightString = entry.getKey();
-            Long[] roleIds = entry.getValue();
-            if (roleIds != null) {
-                for (Long roleId : roleIds) {
-                    RoleObject roleObject = roleObjects.get(roleId);
-                    if (roleObject == null) {
-                        roleObject = new RoleObject();
-                        roleObject.setObject(object);
-                        roleObject.setRole(roleRepository.findOne(roleId));
-                    }
-                    switch (rightString) {
-                        case "can_read":
-                            roleObject.setCanRead(true);
-                            break;
-                        case "can_write":
-                            roleObject.setCanWrite(true);
-                            break;
-                        case "can_delete":
-                            roleObject.setCanDelete(true);
-                            break;
-                    }
-                    roleObjects.put(roleId, roleObject);
-                }
-            }
+        try {
+            setRoleObjectsToObject(object, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
+            dataObjectRepository.save(object);
+        } catch (RoleObjectConsistencyException e) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, e.getMessage()));
         }
-        object.getRoleObjects().clear();
-        object.getRoleObjects().addAll(new HashSet<>(roleObjects.values()));
-        dataObjectRepository.save(object);
         return "redirect:/manage/object/" + objectid;
     }
 
