@@ -55,7 +55,8 @@ into the database.
 If you want to add your own tables you simply have to have an 'AUTO_INCREMENT' integer 'id' column and
 a suitable java class with [JPA](http://projects.spring.io/spring-data-jpa/) annotations which extends
 our 'de.unileipzig.bis.rbs.testApp.model.DataObject' and sets the table name as discriminator value and the
-primary key join column with 'id' as name.
+primary key join column with 'id' as name. To use this model you can create a controller, just like the ones
+for the  test app, which extends 'de.unileipzig.bis.rbs.testApp.controllers.AbstractController'.
 
 ## Release Notes
 
