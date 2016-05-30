@@ -30,6 +30,8 @@ public abstract class AbstractController {
     @Autowired
     private RoleRepository roleRepository;
 
+    private String hintMessage = "";
+
     /**
      * Obtains the currently authenticated principal, or an authentication request token.
      *
@@ -81,40 +83,51 @@ public abstract class AbstractController {
         return null;
     }
 
-        protected void setRoleObjectsToObject(DataObject object, Long[] canReadRoleIds, Long[] canWriteRoleIds, Long[] canDeleteRoleIds) {
-            HashMap<String, Long[]> idCollection = new HashMap<>();
-            idCollection.put("can_read", canReadRoleIds);
-            idCollection.put("can_write", canWriteRoleIds);
-            idCollection.put("can_delete", canDeleteRoleIds);
-            HashMap<Long, RoleObject> roleObjects = new HashMap<>();
-            for (Map.Entry<String, Long[]> entry: idCollection.entrySet()) {
-                String rightString = entry.getKey();
-                Long[] roleIds = entry.getValue();
-                if (roleIds != null) {
-                    for (Long roleId : roleIds) {
-                        RoleObject roleObject = roleObjects.get(roleId);
-                        if (roleObject == null) {
-                            roleObject = new RoleObject();
-                            roleObject.setObject(object);
-                            roleObject.setRole(roleRepository.findOne(roleId));
-                        }
-                        switch (rightString) {
-                            case "can_read":
-                                roleObject.setCanRead(true);
-                                break;
-                            case "can_write":
-                                roleObject.setCanWrite(true);
-                                break;
-                            case "can_delete":
-                                roleObject.setCanDelete(true);
-                                break;
-                        }
-                        roleObjects.put(roleId, roleObject);
+    protected void setRoleObjectsToObject(DataObject object, Long[] canReadRoleIds, Long[] canWriteRoleIds, Long[] canDeleteRoleIds) {
+        HashMap<String, Long[]> idCollection = new HashMap<>();
+        idCollection.put("can_read", canReadRoleIds);
+        idCollection.put("can_write", canWriteRoleIds);
+        idCollection.put("can_delete", canDeleteRoleIds);
+        HashMap<Long, RoleObject> roleObjects = new HashMap<>();
+        for (Map.Entry<String, Long[]> entry: idCollection.entrySet()) {
+            String rightString = entry.getKey();
+            Long[] roleIds = entry.getValue();
+            if (roleIds != null) {
+                for (Long roleId : roleIds) {
+                    RoleObject roleObject = roleObjects.get(roleId);
+                    if (roleObject == null) {
+                        roleObject = new RoleObject();
+                        roleObject.setObject(object);
+                        roleObject.setRole(roleRepository.findOne(roleId));
                     }
+                    switch (rightString) {
+                        case "can_read":
+                            roleObject.setCanRead(true);
+                            break;
+                        case "can_write":
+                            roleObject.setCanWrite(true);
+                            break;
+                        case "can_delete":
+                            roleObject.setCanDelete(true);
+                            break;
+                    }
+                    roleObjects.put(roleId, roleObject);
                 }
             }
-            object.getRoleObjects().clear();
-            object.getRoleObjects().addAll(new HashSet<>(roleObjects.values()));
         }
+        object.getRoleObjects().clear();
+        object.getRoleObjects().addAll(new HashSet<>(roleObjects.values()));
+    }
+
+    @ModelAttribute("hintMessage")
+    public String getHintMessage() {
+        String message = this.hintMessage;
+        this.hintMessage = "";
+        return message;
+    }
+
+    protected void setHintMessage(String hintMessage) {
+        this.hintMessage = hintMessage;
+    }
 
 }

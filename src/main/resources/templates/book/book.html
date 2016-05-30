@@ -11,6 +11,11 @@
 
         <div class="container">
             <h1>Book</h1>
+            <div th:with="message=${hintMessage}" >
+                <div th:if="${message != '' }"  class="alert alert-danger">
+                    <span th:text="${message}" />
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-2"><strong>id</strong></div>
                 <div class="col-md-10"><span th:text="${book.id}">&nbsp;</span></div>
