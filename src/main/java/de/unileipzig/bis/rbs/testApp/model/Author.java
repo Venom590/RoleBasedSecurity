@@ -5,10 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by Stephan on 21.05.2016.
+ * Author database entity model.
+ *
+ * @author Stephan Kemper
  */
 @Entity
-@DiscriminatorValue("rbs_authors")
 @Table(name="rbs_authors")
 @PrimaryKeyJoinColumn(name = "id")
 public class Author extends DataObject {
@@ -42,6 +43,8 @@ public class Author extends DataObject {
     }
 
     /**
+     * Getter for id
+     *
      * @return the id
      */
     public Long getId() {
@@ -49,6 +52,8 @@ public class Author extends DataObject {
     }
 
     /**
+     * Getter for name
+     *
      * @return the name
      */
     public String getName() {
@@ -56,14 +61,26 @@ public class Author extends DataObject {
     }
 
     /**
+     * Setter for name
+     *
      * @param name the name to set
      */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Getter for books
+     *
+     * @return the books
+     */
     public Set<Book> getBooks() { return books; }
 
+    /**
+     * Setter for books
+     *
+     * @param books the books to set
+     */
     public void setBooks(Set<Book> books) { this.books = books; }
 
     @Override

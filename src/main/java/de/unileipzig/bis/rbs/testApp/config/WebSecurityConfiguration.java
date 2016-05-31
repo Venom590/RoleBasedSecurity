@@ -13,11 +13,15 @@ import javax.sql.DataSource;
  * Simple security configuration for the login app
  *
  * @author Stephan Kemper
+ * @author Lukas Werner
  */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    /**
+     * The DataSource
+     */
     @Autowired
     private DataSource dataSource;
 
@@ -25,7 +29,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/", "/css/**", "/fonts/**", "/js/**").permitAll()
+                .antMatchers("/", "/css/**", "/fonts/**", "/js/**", "/register").permitAll()
                 .antMatchers("/manage/role").access("hasAuthority('admin')")
                 .antMatchers("/manage/user").access("hasAuthority('admin')")
                 .anyRequest().authenticated()
@@ -59,12 +63,22 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authoritiesByUsernameQuery(getAuthorityQuery());
     }
 
+    /**
+     * The query for getting users by username
+     *
+     * @return the query
+     */
     private String getUserQuery() {
         return "SELECT username, password, true " +
                 "FROM rbs_users " +
                 "WHERE username = ?";
     }
 
+    /**
+     * The query for getting authorities by username
+     *
+     * @return the query
+     */
     private String getAuthorityQuery() {
         return "SELECT U.username, R.name AS authority " +
                 "FROM rbs_users U " +

@@ -1,7 +1,6 @@
 package de.unileipzig.bis.rbs.testApp.service;
 
 import de.unileipzig.bis.rbs.testApp.model.Author;
-import de.unileipzig.bis.rbs.testApp.model.User;
 import org.springframework.data.repository.CrudRepository;
 
 /**

@@ -3,11 +3,8 @@ package de.unileipzig.bis.rbs.testApp.controllers;
 import de.unileipzig.bis.rbs.testApp.RoleObjectConsistencyException;
 import de.unileipzig.bis.rbs.testApp.model.DataObject;
 import de.unileipzig.bis.rbs.testApp.model.Role;
-import de.unileipzig.bis.rbs.testApp.model.RoleObject;
 import de.unileipzig.bis.rbs.testApp.model.User;
 import de.unileipzig.bis.rbs.testApp.service.DataObjectRepository;
-import de.unileipzig.bis.rbs.testApp.service.RoleRepository;
-import de.unileipzig.bis.rbs.testApp.service.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,15 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * The role controller to manage roles in this application.
  *
  * @author Stephan Kemper
+ * @author Lukas Werner
  */
 @Controller
 @RequestMapping("/manage/role")
@@ -85,6 +81,10 @@ public class RoleController extends AbstractController {
      *
      * @param parentId the parent id
      * @param name the name
+     * @param userIds the user ids to set
+     * @param canReadObjectIds the object ids to set canRead
+     * @param canWriteObjectIds the object ids to set canWrite
+     * @param canDeleteObjectIds the object ids to set canDelete
      * @return the view (redirect)
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -141,6 +141,10 @@ public class RoleController extends AbstractController {
      * @param roleid the role id
      * @param parentId the new parent id
      * @param name the new name
+     * @param userIds the user ids to set
+     * @param canReadObjectIds the object ids to set canRead
+     * @param canWriteObjectIds the object ids to set canWrite
+     * @param canDeleteObjectIds the object ids to set canDelete
      * @return the view (redirect)
      */
     @RequestMapping(value = "/edit/{roleid}", method = RequestMethod.POST)

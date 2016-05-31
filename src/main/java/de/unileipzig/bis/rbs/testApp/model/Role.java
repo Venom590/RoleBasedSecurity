@@ -1,10 +1,8 @@
 package de.unileipzig.bis.rbs.testApp.model;
 
-
 import org.hibernate.annotations.Check;
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -66,6 +64,9 @@ public class Role {
     })
     private Set<DataObject> objects = new HashSet<>(0);
 
+    /**
+     * The role objects (association table)
+     */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.role", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RoleObject> roleObjects = new HashSet<>(0);
 
@@ -99,6 +100,8 @@ public class Role {
     }
 
     /**
+     * Getter for id
+     *
      * @return the id
      */
     public Long getId() {
@@ -107,6 +110,8 @@ public class Role {
 
 
     /**
+     * Getter for parentRole
+     *
      * @return the parent role object
      */
     public Role getParentRole() {
@@ -114,6 +119,8 @@ public class Role {
     }
 
     /**
+     * Setter for parentRole
+     *
      * @param parentRole the parent role object
      */
     public void setParentRole(Role parentRole) {
@@ -121,6 +128,8 @@ public class Role {
     }
 
     /**
+     * Getter for childRoles
+     *
      * @return set of the child role objects
      */
     public Set<Role> getChildRoles() {
@@ -128,6 +137,8 @@ public class Role {
     }
 
     /**
+     * Setter for childRoles
+     *
      * @param childRoles set the child role objects
      */
     public void setChildRoles(Set<Role> childRoles) {
@@ -135,6 +146,8 @@ public class Role {
     }
 
     /**
+     * Getter for name
+     *
      * @return the name
      */
     public String getName() {
@@ -142,6 +155,8 @@ public class Role {
     }
 
     /**
+     * Setter for name
+     *
      * @param name the name to set
      */
     public void setName(String name) {
@@ -149,6 +164,8 @@ public class Role {
     }
 
     /**
+     * Getter for users
+     *
      * @return the users
      */
     public Set<User> getUsers() {
@@ -156,6 +173,8 @@ public class Role {
     }
 
     /**
+     * Setter for users
+     *
      * @param users the users to set
      */
     public void setUsers(Set<User> users) {
@@ -163,6 +182,8 @@ public class Role {
     }
 
     /**
+     * Getter for objects
+     *
      * @return the dataObjects
      */
     public Set<DataObject> getObjects() {
@@ -170,6 +191,8 @@ public class Role {
     }
 
     /**
+     * Setter for objects
+     *
      * @param objects the dataObjects to set
      */
     public void setObjects(Set<DataObject> objects) {
@@ -177,32 +200,29 @@ public class Role {
     }
 
     /**
-     * @return the parent role id
+     * Getter for roleObjects
+     *
+     * @return the roleObjects
      */
-    public Long getParentId() {
-        if (parentRole != null) {
-            return parentRole.getId();
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Pre Remove to set ON DELETE SET NULL
-     */
-    @PreRemove
-    public void preRemove(){
-        this.parentRole = null;
-    }
-
     public Set<RoleObject> getRoleObjects() {
         return roleObjects;
     }
 
+    /**
+     * Setter for roleObjects
+     *
+     * @param roleObjects the roleObjects to set
+     */
     public void setRoleObjects(Set<RoleObject> roleObjects) {
         this.roleObjects = roleObjects;
     }
 
+    /**
+     * Check if you can read the given object with this role
+     *
+     * @param object the given object
+     * @return true if you can read
+     */
     public boolean canRead(DataObject object) {
         for (RoleObject roleObject: roleObjects) {
             if (roleObject.getObject().equals(object) && roleObject.getCanRead()) {
@@ -212,6 +232,12 @@ public class Role {
         return false;
     }
 
+    /**
+     * Check if you can write the given object with this role
+     *
+     * @param object the given object
+     * @return true if you can write
+     */
     public boolean canWrite(DataObject object) {
         for (RoleObject roleObject: roleObjects) {
             if (roleObject.getObject().equals(object) && roleObject.getCanWrite()) {
@@ -221,6 +247,12 @@ public class Role {
         return false;
     }
 
+    /**
+     * Check if you can delete the given object with this role
+     *
+     * @param object the given object
+     * @return true if you can delete
+     */
     public boolean canDelete(DataObject object) {
         for (RoleObject roleObject: roleObjects) {
             if (roleObject.getObject().equals(object) && roleObject.getCanDelete()) {
@@ -290,6 +322,12 @@ public class Role {
         return ascendants;
     }
 
+    /**
+     * Check if this role has more rights on a given roleObject than its ascendants
+     *
+     * @param roleObject the given role object
+     * @return true if it has more rights
+     */
     public boolean hasMoreRightsThanAscendants(RoleObject roleObject) {
         DataObject object = roleObject.getObject();
         Set<Role> ascendants = findAscendants();
@@ -305,6 +343,12 @@ public class Role {
         return false;
     }
 
+    /**
+     * Check if this role has less rights on a given roleObject than its descendants
+     *
+     * @param roleObject the given role object
+     * @return true if it has less rights
+     */
     public boolean hasLessRightsThanDescendants(RoleObject roleObject) {
         DataObject object = roleObject.getObject();
         Set<Role> descendants = findDescendants();

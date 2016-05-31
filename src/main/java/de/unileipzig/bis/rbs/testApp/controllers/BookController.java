@@ -7,7 +7,6 @@ import de.unileipzig.bis.rbs.testApp.model.Role;
 import de.unileipzig.bis.rbs.testApp.model.User;
 import de.unileipzig.bis.rbs.testApp.service.AuthorRepository;
 import de.unileipzig.bis.rbs.testApp.service.BookRepository;
-import de.unileipzig.bis.rbs.testApp.service.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +21,7 @@ import java.util.List;
 /**
  * The book controller to manage books in this application.
  *
- * @author Lukas Werner
+ * @author Stephan Kemper
  */
 @Controller
 @RequestMapping("/manage/book")
@@ -34,6 +33,9 @@ public class BookController extends AbstractController {
     @Autowired
     private BookRepository bookRepository;
 
+    /**
+     * The author repository
+     */
     @Autowired
     private AuthorRepository authorRepository;
 
@@ -79,6 +81,7 @@ public class BookController extends AbstractController {
     /**
      * Create new book (show mask)
      *
+     * @param model the ui model
      * @return the book creation mask
      */
     @RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -101,6 +104,9 @@ public class BookController extends AbstractController {
      * @param isbn the bookname
      * @param title the password
      * @param authorId the name
+     * @param canReadRoleIds the role ids to set canRead
+     * @param canWriteRoleIds the role ids to set canWrite
+     * @param canDeleteRoleIds the role ids to set canDelete
      * @return the view (redirect)
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -156,6 +162,9 @@ public class BookController extends AbstractController {
      * @param isbn the new bookname
      * @param title the new password
      * @param authorId the new name
+     * @param canReadRoleIds the role ids to set canRead
+     * @param canWriteRoleIds the role ids to set canWrite
+     * @param canDeleteRoleIds the role ids to set canDelete
      * @return the view (redirect)
      */
     @RequestMapping(value = "/edit/{bookid}", method = RequestMethod.POST)

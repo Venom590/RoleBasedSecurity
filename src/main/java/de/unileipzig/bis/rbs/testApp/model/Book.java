@@ -3,10 +3,11 @@ package de.unileipzig.bis.rbs.testApp.model;
 import javax.persistence.*;
 
 /**
- * Created by Stephan on 21.05.2016.
+ * Author database entity model.
+ *
+ * @author Stephan Kemper
  */
 @Entity
-@DiscriminatorValue("rbs_books")
 @Table(name="rbs_books")
 @PrimaryKeyJoinColumn(name = "id")
 public class Book extends DataObject {
@@ -48,16 +49,46 @@ public class Book extends DataObject {
         this.author = author;
     }
 
+    /**
+     * Getter for isbn
+     *
+     * @return the isbn
+     */
     public String getIsbn() { return isbn; }
 
+    /**
+     * Setter for isbn
+     *
+     * @param isbn the isbn to set
+     */
     public void setIsbn(String isbn) { this.isbn = isbn; }
 
+    /**
+     * Getter for title
+     *
+     * @return the title
+     */
     public String getTitle() { return title; }
 
+    /**
+     * Setter for title
+     *
+     * @param title the title to set
+     */
     public void setTitle(String title) { this.title = title; }
 
+    /**
+     * Getter for author
+     *
+     * @return the author
+     */
     public Author getAuthor() { return author; }
 
+    /**
+     * Setter for author
+     *
+     * @param author the author to set
+     */
     public void setAuthor(Author author) { this.author = author; }
 
     @Override

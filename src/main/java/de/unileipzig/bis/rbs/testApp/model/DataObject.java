@@ -8,10 +8,10 @@ import java.util.Set;
  * DataObject database entity model.
  *
  * @author Stephan Kemper
+ * @author Lukas Werner
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "table_name")
 @Table(name="rbs_objects")
 public class DataObject {
 
@@ -34,6 +34,9 @@ public class DataObject {
     })
     private Set<Role> roles = new HashSet<>(0);
 
+    /**
+     * The role objects (association table)
+     */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.object", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RoleObject> roleObjects = new HashSet<>(0);
 
@@ -43,6 +46,8 @@ public class DataObject {
     public DataObject() { }
 
     /**
+     * Getter for id
+     *
      * @return the id
      */
     public Long getId() {
@@ -50,6 +55,8 @@ public class DataObject {
     }
 
     /**
+     * Getter for roles
+     *
      * @return the roles
      */
     public Set<Role> getRoles() {
@@ -57,16 +64,28 @@ public class DataObject {
     }
 
     /**
+     * Setter for roles
+     *
      * @param roles the roles to set
      */
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
+    /**
+     * Getter for roleObjects
+     *
+     * @return the roleObjects
+     */
     public Set<RoleObject> getRoleObjects() {
         return roleObjects;
     }
 
+    /**
+     * Setter for roleObjects
+     *
+     * @param roleObjects the roleObjects to set
+     */
     public void setRoleObjects(Set<RoleObject> roleObjects) {
         this.roleObjects = roleObjects;
     }

@@ -2,9 +2,6 @@ package de.unileipzig.bis.rbs.testApp.controllers;
 
 import de.unileipzig.bis.rbs.testApp.model.Role;
 import de.unileipzig.bis.rbs.testApp.model.User;
-import de.unileipzig.bis.rbs.testApp.service.RoleRepository;
-import de.unileipzig.bis.rbs.testApp.service.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 

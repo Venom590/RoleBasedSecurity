@@ -3,11 +3,8 @@ package de.unileipzig.bis.rbs.testApp.controllers;
 import de.unileipzig.bis.rbs.testApp.RoleObjectConsistencyException;
 import de.unileipzig.bis.rbs.testApp.model.DataObject;
 import de.unileipzig.bis.rbs.testApp.model.Role;
-import de.unileipzig.bis.rbs.testApp.model.RoleObject;
 import de.unileipzig.bis.rbs.testApp.model.User;
-import de.unileipzig.bis.rbs.testApp.service.DataObjectRepository;
 import de.unileipzig.bis.rbs.testApp.service.RoleObjectRepository;
-import de.unileipzig.bis.rbs.testApp.service.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +19,7 @@ import java.util.*;
  * The object controller to manage objects in this application.
  *
  * @author Stephan Kemper
+ * @author Lukas Werner
  */
 @Controller
 @RequestMapping("/manage/object")
@@ -95,6 +93,9 @@ public class DataObjectController extends AbstractController {
     /**
      * Create new object (action)
      *
+     * @param canReadRoleIds the role ids to set canRead
+     * @param canWriteRoleIds the role ids to set canWrite
+     * @param canDeleteRoleIds the role ids to set canDelete
      * @return the view (redirect)
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -131,6 +132,9 @@ public class DataObjectController extends AbstractController {
      * Edit existing object (action)
      *
      * @param objectid the object id
+     * @param canReadRoleIds the role ids to set canRead
+     * @param canWriteRoleIds the role ids to set canWrite
+     * @param canDeleteRoleIds the role ids to set canDelete
      * @return the view (redirect)
      */
     @RequestMapping(value = "/edit/{objectid}", method = RequestMethod.POST)

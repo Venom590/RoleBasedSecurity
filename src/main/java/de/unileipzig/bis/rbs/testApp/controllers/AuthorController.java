@@ -3,10 +3,8 @@ package de.unileipzig.bis.rbs.testApp.controllers;
 import de.unileipzig.bis.rbs.testApp.RoleObjectConsistencyException;
 import de.unileipzig.bis.rbs.testApp.model.Author;
 import de.unileipzig.bis.rbs.testApp.model.Role;
-import de.unileipzig.bis.rbs.testApp.model.RoleObject;
 import de.unileipzig.bis.rbs.testApp.model.User;
 import de.unileipzig.bis.rbs.testApp.service.AuthorRepository;
-import de.unileipzig.bis.rbs.testApp.service.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +18,7 @@ import java.util.*;
 /**
  * The author controller to manage authors in this application.
  *
- * @author Lukas Werner
+ * @author Stephan Kemper
  */
 @Controller
 @RequestMapping("/manage/author")
@@ -74,6 +72,7 @@ public class AuthorController extends AbstractController {
     /**
      * Create new author (show mask)
      *
+     * @param model the ui model
      * @return the author creation mask
      */
     @RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -92,6 +91,9 @@ public class AuthorController extends AbstractController {
      * Create new author (action)
      *
      * @param name the name
+     * @param canReadRoleIds the role ids to set canRead
+     * @param canWriteRoleIds the role ids to set canWrite
+     * @param canDeleteRoleIds the role ids to set canDelete
      * @return the view (redirect)
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -139,6 +141,9 @@ public class AuthorController extends AbstractController {
      *
      * @param authorid the author id
      * @param name the new name
+     * @param canReadRoleIds the role ids to set canRead
+     * @param canWriteRoleIds the role ids to set canWrite
+     * @param canDeleteRoleIds the role ids to set canDelete
      * @return the view (redirect)
      */
     @RequestMapping(value = "/edit/{authorid}", method = RequestMethod.POST)

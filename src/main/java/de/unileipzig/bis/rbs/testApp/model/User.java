@@ -1,9 +1,11 @@
 package de.unileipzig.bis.rbs.testApp.model;
 
-import de.unileipzig.bis.rbs.testApp.service.DataObjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +16,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name="rbs_users")
-public class User {
+public class User implements UserDetails {
 
     /**
      * Database id
@@ -71,6 +73,8 @@ public class User {
     }
 
     /**
+     * Getter for id
+     *
      * @return the id
      */
     public Long getId() {
@@ -78,13 +82,37 @@ public class User {
     }
 
     /**
+     * Getter for username
+     *
      * @return the username
      */
     public String getUsername() {
         return username;
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
     /**
+     * Setter for username
+     *
      * @param username the username to set
      */
     public void setUsername(String username) {
@@ -92,6 +120,8 @@ public class User {
     }
 
     /**
+     * Getter for password
+     *
      * @return the password
      */
     public String getPassword() {
@@ -99,6 +129,8 @@ public class User {
     }
 
     /**
+     * Setter for password
+     *
      * @param password the password to set
      */
     public void setPassword(String password) {
@@ -106,6 +138,8 @@ public class User {
     }
 
     /**
+     * Getter for name
+     *
      * @return the name
      */
     public String getName() {
@@ -113,6 +147,8 @@ public class User {
     }
 
     /**
+     * Setter for name
+     *
      * @param name the name to set
      */
     public void setName(String name) {
@@ -120,6 +156,8 @@ public class User {
     }
 
     /**
+     * Getter for roles
+     *
      * @return the roles
      */
     public Set<Role> getRoles() {
@@ -127,12 +165,20 @@ public class User {
     }
 
     /**
+     * Setter for roles
+     *
      * @param roles the roles to set
      */
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
+    /**
+     * Check if this user can read a given object
+     *
+     * @param object the given object
+     * @return true if the user can read
+     */
     public boolean canRead(DataObject object) {
         for (Role role: roles) {
             if (role.canRead(object)) {
@@ -142,6 +188,12 @@ public class User {
         return false;
     }
 
+    /**
+     * Check if this user can write a given object
+     *
+     * @param object the given object
+     * @return true if the user can write
+     */
     public boolean canWrite(DataObject object) {
         for (Role role: roles) {
             if (role.canWrite(object)) {
@@ -151,6 +203,12 @@ public class User {
         return false;
     }
 
+    /**
+     * Check if this user can delete a given object
+     *
+     * @param object the given object
+     * @return true if the user can delete
+     */
     public boolean canDelete(DataObject object) {
         for (Role role: roles) {
             if (role.canDelete(object)) {
@@ -158,6 +216,19 @@ public class User {
             }
         }
         return false;
+    }
+
+    /**
+     * Get GrantedAuthorities for user
+     *
+     * @return granted authorities
+     */
+    public Collection<GrantedAuthority> getAuthorities() {
+        Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        for (final Role r: roles) {
+            grantedAuthorities.add((GrantedAuthority) r::getName);
+        }
+        return grantedAuthorities;
     }
 
     @Override

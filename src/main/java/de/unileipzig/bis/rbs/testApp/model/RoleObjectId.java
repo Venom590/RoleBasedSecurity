@@ -5,28 +5,59 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
+/**
+ * The composed key for role objects
+ *
+ * @author Lukas Werner
+ */
 @Embeddable
 public class RoleObjectId implements Serializable {
 
+    /**
+     * The role of this association
+     */
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+    /**
+     * The object of this association
+     */
     @ManyToOne
     @JoinColumn(name = "object_id")
     private DataObject object;
 
+    /**
+     * Getter for role
+     *
+     * @return the role
+     */
     public Role getRole() {
         return role;
     }
 
+    /**
+     * Setter for role
+     *
+     * @param role the role to set
+     */
     public void setRole(Role role) {
         this.role = role;
     }
 
+    /**
+     * Getter for object
+     *
+     * @return the object
+     */
     public DataObject getObject() {
         return object;
     }
 
+    /**
+     * Setter for object
+     *
+     * @param object the object to set
+     */
     public void setObject(DataObject object) {
         this.object = object;
     }

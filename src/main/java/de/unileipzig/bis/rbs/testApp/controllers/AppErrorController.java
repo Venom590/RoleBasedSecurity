@@ -2,7 +2,6 @@ package de.unileipzig.bis.rbs.testApp.controllers;
 
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -14,6 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class AppErrorController extends AbstractController implements ErrorController {
 
+    /**
+     * The error view
+     *
+     * @return error view
+     */
     @RequestMapping(value = "/error")
     public String error() {
         return "error/error";

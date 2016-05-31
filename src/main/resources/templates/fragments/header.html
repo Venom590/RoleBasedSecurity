@@ -13,30 +13,45 @@
                     </div>
                     <div class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
-                            <li th:unless="${isLogged}"  >
-                                <li><a href="#" th:href="@{/login}">Sign in</a></li>
+                            <li th:if="${isLogged}">
+                                <a href="#" th:href="@{/manage/object}">Object overview</a>
                             </li>
-                            <li th:if="${isLogged}"  >
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"> Manage <span class="caret"></span></a>
-                                    <ul class="dropdown-menu">
-                                        <li th:if="${isAdmin}"  >
-                                            <li><a href="#" th:href="@{/manage/user}">Users (restricted)</a></li>
-                                            <li><a href="#" th:href="@{/manage/role}">Roles (restricted)</a></li>
-                                        </li>
-                                            <li><a href="#" th:href="@{/manage/object/myobjects}">My Objects</a></li>
-                                            <li><a href="#" th:href="@{/manage/object}">All Objects</a></li>
-                                        <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"> Manage Objects <span class="caret"></span></a>
-                                        <ul class="dropdown-menu"> -->
-                                            <li><a href="#" th:href="@{/manage/book}">Books</a></li>
-                                            <li><a href="#" th:href="@{/manage/author}">Authors</a></li>
-
-                                        <!-- </ul> -->
-                                    </ul>
-
-                                </li>
-
-                                <li><a href="#" th:href="@{/logout}">Sign out</a></li>
+                            <li th:if="${isLogged}">
+                                <a href="#" th:href="@{/manage/book}">Books</a>
+                            </li>
+                            <li th:if="${isLogged}">
+                                <a href="#" th:href="@{/manage/author}">Authors</a>
+                            </li>
+                            <li class="dropdown" th:if="${isAdmin}">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Manage <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="#" th:href="@{/manage/user}">Users</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" th:href="@{/manage/role}">Roles</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><span class="glyphicon glyphicon-user"></span> <span th:text="${currName}"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li th:if="${isLogged}">
+                                        <a href="#" th:href="@{/settings}">Settings</a>
+                                    </li>
+                                    <li th:unless="${isLogged}">
+                                        <a href="#" th:href="@{/register}">Register</a>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li th:unless="${isLogged}">
+                                        <a href="#" th:href="@{/login}">Sign in</a>
+                                    </li>
+                                    <li th:if="${isLogged}">
+                                        <a href="#" th:href="@{/logout}">Sign out</a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -44,7 +59,7 @@
             </nav>
             <div class="container" style="margin-top: 50px;">
                 <div th:if="${hintMessage != null}">
-                    <div th:class="'alert alert-' + ${hintMessage.status}" class="alert alert-danger" th:text="${hintMessage}" style="margin: 0;">&nbsp;</div>
+                    <div th:class="'alert alert-' + ${hintMessage.status}" class="alert alert-danger" th:text="${hintMessage}" >&nbsp;</div>
                 </div>
             </div>
         </div>

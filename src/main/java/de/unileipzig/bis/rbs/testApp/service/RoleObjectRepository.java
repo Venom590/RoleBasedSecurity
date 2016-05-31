@@ -1,6 +1,5 @@
 package de.unileipzig.bis.rbs.testApp.service;
 
-import de.unileipzig.bis.rbs.testApp.model.DataObject;
 import de.unileipzig.bis.rbs.testApp.model.RoleObject;
 import org.springframework.data.repository.CrudRepository;
 
