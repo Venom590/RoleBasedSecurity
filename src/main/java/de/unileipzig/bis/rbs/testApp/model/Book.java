@@ -9,7 +9,6 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="rbs_books")
-@DiscriminatorValue("rbs_books")
 @PrimaryKeyJoinColumn(name = "id")
 public class Book extends DataObject {
 

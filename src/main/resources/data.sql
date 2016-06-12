@@ -24,6 +24,28 @@ INSERT INTO rbs_users_roles (user_id, role_id) VALUES (4, 7);
 INSERT INTO rbs_users_roles (user_id, role_id) VALUES (5, 2);
 INSERT INTO rbs_users_roles (user_id, role_id) VALUES (5, 9);
 
+INSERT INTO rbs_objects (id) VALUES (1);
+INSERT INTO rbs_objects (id) VALUES (2);
+INSERT INTO rbs_objects (id) VALUES (3);
+INSERT INTO rbs_objects (id) VALUES (4);
+INSERT INTO rbs_objects (id) VALUES (5);
+INSERT INTO rbs_objects (id) VALUES (6);
+INSERT INTO rbs_objects (id) VALUES (7);
+INSERT INTO rbs_objects (id) VALUES (8);
+INSERT INTO rbs_objects (id) VALUES (9);
+INSERT INTO rbs_objects (id) VALUES (10);
+INSERT INTO rbs_objects (id) VALUES (11);
+INSERT INTO rbs_objects (id) VALUES (12);
+INSERT INTO rbs_objects (id) VALUES (13);
+INSERT INTO rbs_objects (id) VALUES (14);
+INSERT INTO rbs_objects (id) VALUES (15);
+INSERT INTO rbs_objects (id) VALUES (16);
+INSERT INTO rbs_objects (id) VALUES (17);
+INSERT INTO rbs_objects (id) VALUES (18);
+INSERT INTO rbs_objects (id) VALUES (19);
+INSERT INTO rbs_objects (id) VALUES (20);
+INSERT INTO rbs_objects (id) VALUES (21);
+
 INSERT INTO rbs_authors (id, name) VALUES (1, 'Stephen King');
 INSERT INTO rbs_authors (id, name) VALUES (2, 'Dan Brown');
 INSERT INTO rbs_authors (id, name) VALUES (3, 'Joanne K. Rowling');
@@ -46,28 +68,6 @@ INSERT INTO rbs_books (id, isbn, title, author_id) VALUES (18, '9780547928227', 
 INSERT INTO rbs_books (id, isbn, title, author_id) VALUES (19, '9780547928210', 'The Fellowship of the Ring', 4);
 INSERT INTO rbs_books (id, isbn, title, author_id) VALUES (20, '9780547928203', 'The Two Towers', 4);
 INSERT INTO rbs_books (id, isbn, title, author_id) VALUES (21, '9780547928197', 'The Return of the King', 4);
-
-INSERT INTO rbs_objects (id, table_name) VALUES (1, 'rbs_authors');
-INSERT INTO rbs_objects (id, table_name) VALUES (2, 'rbs_authors');
-INSERT INTO rbs_objects (id, table_name) VALUES (3, 'rbs_authors');
-INSERT INTO rbs_objects (id, table_name) VALUES (4, 'rbs_authors');
-INSERT INTO rbs_objects (id, table_name) VALUES (5, 'rbs_authors');
-INSERT INTO rbs_objects (id, table_name) VALUES (6, 'rbs_books');
-INSERT INTO rbs_objects (id, table_name) VALUES (7, 'rbs_books');
-INSERT INTO rbs_objects (id, table_name) VALUES (8, 'rbs_books');
-INSERT INTO rbs_objects (id, table_name) VALUES (9, 'rbs_books');
-INSERT INTO rbs_objects (id, table_name) VALUES (10, 'rbs_books');
-INSERT INTO rbs_objects (id, table_name) VALUES (11, 'rbs_books');
-INSERT INTO rbs_objects (id, table_name) VALUES (12, 'rbs_books');
-INSERT INTO rbs_objects (id, table_name) VALUES (13, 'rbs_books');
-INSERT INTO rbs_objects (id, table_name) VALUES (14, 'rbs_books');
-INSERT INTO rbs_objects (id, table_name) VALUES (15, 'rbs_books');
-INSERT INTO rbs_objects (id, table_name) VALUES (16, 'rbs_books');
-INSERT INTO rbs_objects (id, table_name) VALUES (17, 'rbs_books');
-INSERT INTO rbs_objects (id, table_name) VALUES (18, 'rbs_books');
-INSERT INTO rbs_objects (id, table_name) VALUES (19, 'rbs_books');
-INSERT INTO rbs_objects (id, table_name) VALUES (20, 'rbs_books');
-INSERT INTO rbs_objects (id, table_name) VALUES (21, 'rbs_books');
 
 INSERT INTO rbs_roles_objects (role_id, object_id, can_read, can_write, can_delete) VALUES (1, 1, true, true, true);
 INSERT INTO rbs_roles_objects (role_id, object_id, can_read, can_write, can_delete) VALUES (1, 2, true, true, true);

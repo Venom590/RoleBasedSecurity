@@ -11,7 +11,6 @@ import java.util.Set;
  */
 @Entity
 @Table(name="rbs_authors")
-@DiscriminatorValue("rbs_authors")
 @PrimaryKeyJoinColumn(name = "id")
 public class Author extends DataObject {
 

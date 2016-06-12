@@ -12,7 +12,6 @@ import java.util.Set;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name="table_name")
 @Table(name="rbs_objects")
 public class DataObject {
 

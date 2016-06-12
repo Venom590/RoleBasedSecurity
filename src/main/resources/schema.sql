@@ -24,22 +24,22 @@ CREATE TABLE rbs_users (
 );
 
 CREATE TABLE rbs_objects (
-  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
---  table_object_id INT NOT NULL,  for real global id a local table id has to be referenced
-  table_name VARCHAR(255) NOT NULL,
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT
 );
 
 CREATE TABLE rbs_authors (
-  id INT NOT NULL AUTO_INCREMENT,
-  name VARCHAR(255) NOT NULL
+  id INT NOT NULL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  FOREIGN KEY (id) REFERENCES rbs_objects(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE rbs_books (
-  id INT NOT NULL AUTO_INCREMENT,
+  id INT NOT NULL PRIMARY KEY,
   isbn VARCHAR(255) NOT NULL,
   title VARCHAR(255) NOT NULL,
   author_id INT NULL,
-  FOREIGN KEY (author_id) REFERENCES rbs_authors(id) ON DELETE SET NULL ON UPDATE CASCADE
+  FOREIGN KEY (author_id) REFERENCES rbs_authors(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY (id) REFERENCES rbs_objects(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE rbs_users_roles (
