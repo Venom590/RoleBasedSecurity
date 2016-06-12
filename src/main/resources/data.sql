@@ -43,9 +43,9 @@ INSERT INTO rbs_books (id, isbn, title, author_id) VALUES (15, '9780439023528', 
 INSERT INTO rbs_books (id, isbn, title, author_id) VALUES (16, '9780545586177', 'Catching Fire', 5);
 INSERT INTO rbs_books (id, isbn, title, author_id) VALUES (17, '9780545663267', 'Mockingjay', 5);
 INSERT INTO rbs_books (id, isbn, title, author_id) VALUES (18, '9780547928227', 'The Hobbit', 4);
-INSERT INTO rbs_books (id, isbn, title, author_id) VALUES (18, '9780547928210', 'The Fellowship of the Ring', 4);
-INSERT INTO rbs_books (id, isbn, title, author_id) VALUES (19, '9780547928203', 'The Two Towers', 4);
-INSERT INTO rbs_books (id, isbn, title, author_id) VALUES (20, '9780547928197', 'The Return of the King', 4);
+INSERT INTO rbs_books (id, isbn, title, author_id) VALUES (19, '9780547928210', 'The Fellowship of the Ring', 4);
+INSERT INTO rbs_books (id, isbn, title, author_id) VALUES (20, '9780547928203', 'The Two Towers', 4);
+INSERT INTO rbs_books (id, isbn, title, author_id) VALUES (21, '9780547928197', 'The Return of the King', 4);
 
 INSERT INTO rbs_objects (id, table_name) VALUES (1, 'rbs_authors');
 INSERT INTO rbs_objects (id, table_name) VALUES (2, 'rbs_authors');
@@ -67,6 +67,7 @@ INSERT INTO rbs_objects (id, table_name) VALUES (17, 'rbs_books');
 INSERT INTO rbs_objects (id, table_name) VALUES (18, 'rbs_books');
 INSERT INTO rbs_objects (id, table_name) VALUES (19, 'rbs_books');
 INSERT INTO rbs_objects (id, table_name) VALUES (20, 'rbs_books');
+INSERT INTO rbs_objects (id, table_name) VALUES (21, 'rbs_books');
 
 INSERT INTO rbs_roles_objects (role_id, object_id, can_read, can_write, can_delete) VALUES (1, 1, true, true, true);
 INSERT INTO rbs_roles_objects (role_id, object_id, can_read, can_write, can_delete) VALUES (1, 2, true, true, true);
@@ -88,6 +89,7 @@ INSERT INTO rbs_roles_objects (role_id, object_id, can_read, can_write, can_dele
 INSERT INTO rbs_roles_objects (role_id, object_id, can_read, can_write, can_delete) VALUES (1, 18, true, true, true);
 INSERT INTO rbs_roles_objects (role_id, object_id, can_read, can_write, can_delete) VALUES (1, 19, true, true, true);
 INSERT INTO rbs_roles_objects (role_id, object_id, can_read, can_write, can_delete) VALUES (1, 20, true, true, true);
+INSERT INTO rbs_roles_objects (role_id, object_id, can_read, can_write, can_delete) VALUES (1, 21, true, true, true);
 INSERT INTO rbs_roles_objects (role_id, object_id, can_read, can_write, can_delete) VALUES (2, 1, true, true, true);
 INSERT INTO rbs_roles_objects (role_id, object_id, can_read, can_write, can_delete) VALUES (2, 2, true, true, true);
 INSERT INTO rbs_roles_objects (role_id, object_id, can_read, can_write, can_delete) VALUES (2, 3, true, false, false);
