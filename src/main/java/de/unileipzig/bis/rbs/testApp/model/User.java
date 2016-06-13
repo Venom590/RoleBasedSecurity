@@ -46,7 +46,7 @@ public class User implements UserDetails {
     /**
      * Roles
      */
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "rbs_users_roles", joinColumns = {
             @JoinColumn(name = "user_id", nullable = false)
     }, inverseJoinColumns = {

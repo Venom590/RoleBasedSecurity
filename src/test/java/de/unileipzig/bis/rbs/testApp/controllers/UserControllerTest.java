@@ -1,53 +1,41 @@
 package de.unileipzig.bis.rbs.testApp.controllers;
 
 import de.unileipzig.bis.rbs.testApp.TestApp;
+import de.unileipzig.bis.rbs.testApp.model.User;
 import de.unileipzig.bis.rbs.testApp.service.UserRepository;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.web.context.WebApplicationContext;
-
-import javax.servlet.http.Cookie;
-
-import java.security.Principal;
-
 
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TestApp.class)
 @WebAppConfiguration
 public class UserControllerTest {
 
     private MockMvc mockMvc;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -55,12 +43,13 @@ public class UserControllerTest {
 
     @Before
     public void setUp() throws Exception {
+        MockitoAnnotations.initMocks(this);
         mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
     @Test
     @WithMockUser(username = "admin", password = "admin", roles = "admin")
-    public void users() throws Exception {
+    public void test1Users() throws Exception {
         mockMvc.perform(get("/manage/user"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/all-users"));
@@ -69,7 +58,8 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser(username = "admin", password = "admin", roles = "admin")
-    public void user() throws Exception {
+    public void test2User() throws Exception {
+        System.out.println("test2User()");
         int id = 2;
         mockMvc.perform(get("/manage/user/{id}", id))
                 .andExpect(status().isOk())
@@ -81,22 +71,36 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser(username = "admin", password = "admin", roles = "admin")
-    public void doEdit() throws Exception {
-        int id = 2;
-        String[] roleIds;
-        roleIds = new String[1];
-        roleIds[0] = "2L";
+    public void test3DoEdit() throws Exception {
+        System.out.println("test3DoEdit()");
+        final int id = 2;
         mockMvc.perform(post("/manage/user/edit/{id}", id)
             .param("username", "testuser")
             .param("password", "test")
-            .param("name", "New Name")
-            .param("roles[]", roleIds))
-                .andExpect(status().isOk())
-                .andExpect(view().name("/manage/user/" + id))
-                .andExpect(model().attribute("user", hasProperty("id", is(Long.valueOf(id)))))
-                .andExpect(model().attribute("user", hasProperty("name", is("New Name"))));
-//                .andDo(MockMvcResultHandlers.print())
+            .param("name", "New Name"))
+                .andExpect(status().is(302))
+                .andExpect(view().name("redirect:/manage/user/" + id));
+        User user = userRepository.findOne((long)id);
+        Assert.assertEquals(user.getName(), "New Name");
+    }
 
+    public static class MockSecurityContext implements SecurityContext {
+
+        private Authentication authentication;
+
+        public MockSecurityContext(Authentication authentication) {
+            this.authentication = authentication;
+        }
+
+        @Override
+        public Authentication getAuthentication() {
+            return authentication;
+        }
+
+        @Override
+        public void setAuthentication(Authentication authentication) {
+            this.authentication = authentication;
+        }
     }
 
 }
