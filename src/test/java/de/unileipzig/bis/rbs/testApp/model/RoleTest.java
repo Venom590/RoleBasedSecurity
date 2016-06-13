@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -27,6 +26,8 @@ public class RoleTest {
     private Role node6;
     private Set<Role> roles;
 
+    private DataObject testObject;
+
     @Before
     public void setUp() {
         root = new Role("root", null);
@@ -40,36 +41,67 @@ public class RoleTest {
         node1.setChildRoles(new HashSet<>(Arrays.asList(node3, node4)));
         node2.setChildRoles(new HashSet<>(Arrays.asList(node5, node6)));
         roles = new HashSet<>(Arrays.asList(root, node1, node2, node3, node4, node5, node6));
+
+        testObject = new DataObject();
+        RoleObject testRoleObject = new RoleObject();
+        testRoleObject.setObject(testObject);
+        testRoleObject.setRole(root);
+        testRoleObject.setCanRead(true);
+        testRoleObject.setCanWrite(true);
+        testRoleObject.setCanDelete(true);
+        root.setRoleObjects(new HashSet<>(Arrays.asList(testRoleObject)));
+        testObject.setRoleObjects(new HashSet<>(Arrays.asList(testRoleObject)));
     }
 
     @Test
     public void findRoot() throws Exception {
         for (Role r: roles) {
-            Assert.assertNotNull(r.findRoot());
-            Assert.assertSame(r.findRoot(), root);
+            assertNotNull(r.findRoot());
+            assertSame(r.findRoot(), root);
         }
     }
 
     @Test
     public void findDescendants() throws Exception {
-        Assert.assertEquals(root.findDescendants(), roles);
-        Assert.assertEquals(node1.findDescendants(), new HashSet<>(Arrays.asList(node3, node4)));
-        Assert.assertEquals(node2.findDescendants(), new HashSet<>(Arrays.asList(node5, node6)));
-        Assert.assertEquals(node3.findDescendants(), new HashSet<>());
-        Assert.assertEquals(node4.findDescendants(), new HashSet<>());
-        Assert.assertEquals(node5.findDescendants(), new HashSet<>());
-        Assert.assertEquals(node6.findDescendants(), new HashSet<>());
+        assertEquals(root.findDescendants(), roles);
+        assertEquals(node1.findDescendants(), new HashSet<>(Arrays.asList(node3, node4)));
+        assertEquals(node2.findDescendants(), new HashSet<>(Arrays.asList(node5, node6)));
+        assertEquals(node3.findDescendants(), new HashSet<>());
+        assertEquals(node4.findDescendants(), new HashSet<>());
+        assertEquals(node5.findDescendants(), new HashSet<>());
+        assertEquals(node6.findDescendants(), new HashSet<>());
     }
 
     @Test
     public void findAscendants() throws Exception {
-        Assert.assertEquals(root.findAscendants(), new HashSet<>(Arrays.asList()));
-        Assert.assertEquals(node1.findAscendants(), new HashSet<>(Arrays.asList(root)));
-        Assert.assertEquals(node2.findAscendants(), new HashSet<>(Arrays.asList(root)));
-        Assert.assertEquals(node3.findAscendants(), new HashSet<>(Arrays.asList(root, node1)));
-        Assert.assertEquals(node4.findAscendants(), new HashSet<>(Arrays.asList(root, node1)));
-        Assert.assertEquals(node5.findAscendants(), new HashSet<>(Arrays.asList(root, node2)));
-        Assert.assertEquals(node6.findAscendants(), new HashSet<>(Arrays.asList(root, node2)));
+        assertEquals(root.findAscendants(), new HashSet<>(Arrays.asList()));
+        assertEquals(node1.findAscendants(), new HashSet<>(Arrays.asList(root)));
+        assertEquals(node2.findAscendants(), new HashSet<>(Arrays.asList(root)));
+        assertEquals(node3.findAscendants(), new HashSet<>(Arrays.asList(root, node1)));
+        assertEquals(node4.findAscendants(), new HashSet<>(Arrays.asList(root, node1)));
+        assertEquals(node5.findAscendants(), new HashSet<>(Arrays.asList(root, node2)));
+        assertEquals(node6.findAscendants(), new HashSet<>(Arrays.asList(root, node2)));
+    }
+
+    @Test
+    public void canRead() {
+        for (Role r: roles) {
+            assertTrue(r.canRead(testObject));
+        }
+    }
+
+    @Test
+    public void canWrite() {
+        for (Role r: roles) {
+            assertTrue(r.canWrite(testObject));
+        }
+    }
+
+    @Test
+    public void canDelete() {
+        for (Role r: roles) {
+            assertTrue(r.canDelete(testObject));
+        }
     }
 
 }
