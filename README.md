@@ -60,6 +60,12 @@ for the  test app, which extends 'de.unileipzig.bis.rbs.testApp.controllers.Abst
 
 ## Release Notes
 
+### v0.4 (2016-06-14)
+- Improved frontends and backends (admin not changeable, security improved)
+- Hide admin user in management
+- Bug fixed: Can not remove all rights
+- Bug fixed: Error on deleting referenced entries
+
 ### v0.3 (2016-05-31)
 - Beautified and extended this readme file
 - Created views to show rights for objects to a logged in user
