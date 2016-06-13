@@ -78,8 +78,7 @@ public class AuthorController extends AbstractController {
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model) {
         if (isAdmin()) {
-            Iterable<Role> roles = roleRepository.findAll();
-            model.addAttribute("roles", roles);
+            model.addAttribute("roles", getAllRoles());
             return "author/create";
         } else {
             setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have read rights for objects here."));
@@ -127,8 +126,7 @@ public class AuthorController extends AbstractController {
         Author author = authorRepository.findOne(Long.valueOf(authorid));
         if (canWrite(author)) {
             model.addAttribute("author", author);
-            Iterable<Role> roles = roleRepository.findAll();
-            model.addAttribute("roles", roles);
+            model.addAttribute("roles", getAllRoles());
             return "author/edit";
         } else {
             setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have write rights for object with id: " + authorid));

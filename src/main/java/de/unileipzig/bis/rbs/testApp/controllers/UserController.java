@@ -56,8 +56,7 @@ public class UserController extends AbstractController {
      */
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model) {
-        Iterable<Role> roles = roleRepository.findAll();
-        model.addAttribute("roles", roles);
+        model.addAttribute("roles", getAllRoles());
         return "user/create";
     }
 
@@ -97,9 +96,12 @@ public class UserController extends AbstractController {
     @RequestMapping(value = "/edit/{userid}", method = RequestMethod.GET)
     public String edit(@PathVariable String userid, Model model) {
         User user = userRepository.findOne(Long.valueOf(userid));
-        Iterable<Role> roles = roleRepository.findAll();
+        if (user.getUsername().equals("admin")) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You can not edit the admin user."));
+            return "redirect:/manage/user";
+        }
         model.addAttribute("user", user);
-        model.addAttribute("roles", roles);
+        model.addAttribute("roles", getAllRoles());
         return "user/edit";
     }
 
@@ -120,6 +122,10 @@ public class UserController extends AbstractController {
                          @RequestParam(value = "name", required = false) String name,
                          @RequestParam(value = "roles[]", required = false) Long[] roleIds) {
         User user = userRepository.findOne(Long.valueOf(userid));
+        if (user.getUsername().equals("admin")) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You can not edit the admin user."));
+            return "redirect:/manage/user";
+        }
         user.setUsername(username);
         user.setPassword(password);
         user.setName(name);
@@ -143,6 +149,11 @@ public class UserController extends AbstractController {
      */
     @RequestMapping(value = "/delete/{userid}", method = RequestMethod.GET)
     public String delete(@PathVariable String userid) {
+        User user = userRepository.findOne(Long.valueOf(userid));
+        if (user.getUsername().equals("admin")) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You can not delete the admin user."));
+            return "redirect:/manage/user";
+        }
         userRepository.delete(Long.valueOf(userid));
         return "redirect:/manage/user";
     }

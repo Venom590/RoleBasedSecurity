@@ -124,6 +124,42 @@ public abstract class AbstractController {
     }
 
     /**
+     * Get all users but admin
+     *
+     * @return all users but admin
+     */
+    protected Iterable<User> getAllUsers() {
+        Iterable<User> allUsers = userRepository.findAll();
+        Iterator<User> it = allUsers.iterator();
+        while (it.hasNext()) {
+            User u = it.next();
+            if (u.getUsername().equals("admin")) {
+                it.remove();
+                break;
+            }
+        }
+        return allUsers;
+    }
+
+    /**
+     * Get all roles but admin
+     *
+     * @return all roles but admin
+     */
+    protected Iterable<Role> getAllRoles() {
+        Iterable<Role> allRoles = roleRepository.findAll();
+        Iterator<Role> it = allRoles.iterator();
+        while (it.hasNext()) {
+            Role r = it.next();
+            if (r.getName().equals("admin")) {
+                it.remove();
+                break;
+            }
+        }
+        return allRoles;
+    }
+
+    /**
      * Internal method to reduce code duplicates. It sets the right by a given right string (could be implemented with callbacks)
      *
      * @todo Implement with callbacks
@@ -214,6 +250,7 @@ public abstract class AbstractController {
         checkRoleObjectConsistency(roleObjects.values());
         object.getRoleObjects().clear();
         object.getRoleObjects().addAll(new HashSet<>(roleObjects.values()));
+        System.out.println(object.getRoleObjects());
     }
 
     /**

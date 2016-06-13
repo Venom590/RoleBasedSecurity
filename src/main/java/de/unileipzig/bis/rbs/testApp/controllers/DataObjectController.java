@@ -85,8 +85,7 @@ public class DataObjectController extends AbstractController {
      */
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model) {
-        Iterable<Role> roles = roleRepository.findAll();
-        model.addAttribute("roles", roles);
+        model.addAttribute("roles", getAllRoles());
         return "object/create";
     }
 
@@ -123,8 +122,7 @@ public class DataObjectController extends AbstractController {
     public String edit(@PathVariable String objectid, Model model) {
         DataObject object = dataObjectRepository.findOne(Long.valueOf(objectid));
         model.addAttribute("object", object);
-        Iterable<Role> roles = roleRepository.findAll();
-        model.addAttribute("roles", roles);
+        model.addAttribute("roles", getAllRoles());
         return "object/edit";
     }
 

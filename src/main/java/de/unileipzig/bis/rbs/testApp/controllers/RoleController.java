@@ -1,7 +1,5 @@
 package de.unileipzig.bis.rbs.testApp.controllers;
 
-import de.unileipzig.bis.rbs.testApp.RoleObjectConsistencyException;
-import de.unileipzig.bis.rbs.testApp.model.DataObject;
 import de.unileipzig.bis.rbs.testApp.model.Role;
 import de.unileipzig.bis.rbs.testApp.model.User;
 import de.unileipzig.bis.rbs.testApp.service.DataObjectRepository;
@@ -67,12 +65,8 @@ public class RoleController extends AbstractController {
      */
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model) {
-        Iterable<Role> allRoles = roleRepository.findAll();
-        Iterable<User> users = userRepository.findAll();
-        Iterable<DataObject> objects = dataObjectRepository.findAll();
-        model.addAttribute("roles", allRoles);
-        model.addAttribute("users", users);
-        model.addAttribute("objects", objects);
+        model.addAttribute("roles", getAllRoles());
+        model.addAttribute("users", getAllUsers());
         return "role/create";
     }
 
@@ -82,18 +76,12 @@ public class RoleController extends AbstractController {
      * @param parentId the parent id
      * @param name the name
      * @param userIds the user ids to set
-     * @param canReadObjectIds the object ids to set canRead
-     * @param canWriteObjectIds the object ids to set canWrite
-     * @param canDeleteObjectIds the object ids to set canDelete
      * @return the view (redirect)
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String doCreate(@RequestParam(value = "parent_id") Long parentId,
                            @RequestParam(value = "name", required = false) String name,
-                           @RequestParam(value = "users[]", required = false) Long[] userIds,
-                           @RequestParam(value = "can_read[]", required = false) Long[] canReadObjectIds,
-                           @RequestParam(value = "can_write[]", required = false) Long[] canWriteObjectIds,
-                           @RequestParam(value = "can_delete[]", required = false) Long[] canDeleteObjectIds) {
+                           @RequestParam(value = "users[]", required = false) Long[] userIds) {
         Role role = new Role();
         role.setName(name);
         if (parentId != null && parentId != 0) {
@@ -106,12 +94,7 @@ public class RoleController extends AbstractController {
             }
         }
         role.getUsers().addAll(users);
-        try {
-            setRoleObjectsToRole(role, canReadObjectIds, canWriteObjectIds, canDeleteObjectIds);
-            roleRepository.save(role);
-        } catch (RoleObjectConsistencyException e) {
-            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, e.getMessage()));
-        }
+        roleRepository.save(role);
         return "redirect:/manage/role";
     }
 
@@ -125,13 +108,13 @@ public class RoleController extends AbstractController {
     @RequestMapping(value = "/edit/{roleid}", method = RequestMethod.GET)
     public String edit(@PathVariable String roleid, Model model) {
         Role role = roleRepository.findOne(Long.valueOf(roleid));
+        if (role.getName().equals("admin")) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You can not edit the admin role."));
+            return "redirect:/manage/role";
+        }
         model.addAttribute("role", role);
-        Iterable<Role> allRoles = roleRepository.findAll();
-        model.addAttribute("roles", allRoles);
-        Iterable<User> users = userRepository.findAll();
-        model.addAttribute("users", users);
-        Iterable<DataObject> objects = dataObjectRepository.findAll();
-        model.addAttribute("objects", objects);
+        model.addAttribute("roles", getAllRoles());
+        model.addAttribute("users", getAllUsers());
         return "role/edit";
     }
 
@@ -142,20 +125,18 @@ public class RoleController extends AbstractController {
      * @param parentId the new parent id
      * @param name the new name
      * @param userIds the user ids to set
-     * @param canReadObjectIds the object ids to set canRead
-     * @param canWriteObjectIds the object ids to set canWrite
-     * @param canDeleteObjectIds the object ids to set canDelete
      * @return the view (redirect)
      */
     @RequestMapping(value = "/edit/{roleid}", method = RequestMethod.POST)
     public String doEdit(@PathVariable String roleid,
                          @RequestParam(value = "parent_id", required = false) Long parentId,
                          @RequestParam(value = "name") String name,
-                         @RequestParam(value = "users[]", required = false) Long[] userIds,
-                         @RequestParam(value = "can_read[]", required = false) Long[] canReadObjectIds,
-                         @RequestParam(value = "can_write[]", required = false) Long[] canWriteObjectIds,
-                         @RequestParam(value = "can_delete[]", required = false) Long[] canDeleteObjectIds) {
+                         @RequestParam(value = "users[]", required = false) Long[] userIds) {
         Role role = roleRepository.findOne(Long.valueOf(roleid));
+        if (role.getName().equals("admin")) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You can not edit the admin role."));
+            return "redirect:/manage/role";
+        }
         if (parentId != null && parentId != 0) {
             Role parentRole = roleRepository.findOne(parentId);
             if (parentRole.findAscendants().contains(role)) {
@@ -175,12 +156,7 @@ public class RoleController extends AbstractController {
         }
         role.getUsers().clear();
         role.getUsers().addAll(users);
-        try {
-            setRoleObjectsToRole(role, canReadObjectIds, canWriteObjectIds, canDeleteObjectIds);
-            roleRepository.save(role);
-        } catch (RoleObjectConsistencyException e) {
-            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, e.getMessage()));
-        }
+        roleRepository.save(role);
         return "redirect:/manage/role/" + roleid;
     }
 
@@ -192,7 +168,12 @@ public class RoleController extends AbstractController {
      */
     @RequestMapping(value = "/delete/{roleid}", method = RequestMethod.GET)
     public String delete(@PathVariable String roleid) {
-        roleRepository.delete(Long.valueOf(roleid));
+        Role role = roleRepository.findOne(Long.valueOf(roleid));
+        if (!role.getName().equals("admin")) {
+            roleRepository.delete(Long.valueOf(roleid));
+        } else {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You can not delete the admin role."));
+        }
         return "redirect:/manage/role";
     }
 

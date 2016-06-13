@@ -224,6 +224,9 @@ public class Role {
      * @return true if you can read
      */
     public boolean canRead(DataObject object) {
+        if (this.getName().equals("admin")) {
+            return true;
+        }
         for (RoleObject roleObject: roleObjects) {
             if (roleObject.getObject().equals(object) && roleObject.getCanRead()) {
                 return true;
@@ -239,6 +242,9 @@ public class Role {
      * @return true if you can write
      */
     public boolean canWrite(DataObject object) {
+        if (this.getName().equals("admin")) {
+            return true;
+        }
         for (RoleObject roleObject: roleObjects) {
             if (roleObject.getObject().equals(object) && roleObject.getCanWrite()) {
                 return true;
@@ -254,6 +260,9 @@ public class Role {
      * @return true if you can delete
      */
     public boolean canDelete(DataObject object) {
+        if (this.getName().equals("admin")) {
+            return true;
+        }
         for (RoleObject roleObject: roleObjects) {
             if (roleObject.getObject().equals(object) && roleObject.getCanDelete()) {
                 return true;

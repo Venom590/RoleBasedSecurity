@@ -36,27 +36,12 @@
                             <a href="#" th:href="@{/manage/book/{bookId}(bookId=${book.author?.id})}" th:text="${book.author?.name}">&nbsp;</a>
                         </td>
                         <td class="text-right">
-                            <!-- TODO Embedded JS doesn't work -->
-                            <span th:if="${getCurrentUser.canWrite(book)}"  >
-                               <a href="#" th:href="@{/manage/book/edit/{bookId}(bookId=${book.id})}" class="btn btn-warning">
+                               <a href="#" th:href="@{/manage/book/edit/{bookId}(bookId=${book.id})}" class="btn btn-warning" th:classappend="${!getCurrentUser.canWrite(book) ? 'disabled' : ''}">
                                    <span class="glyphicon glyphicon-pencil"></span> Edit
                                </a>
-                            </span>
-                           <span th:unless="${getCurrentUser.canWrite(book)}"  >
-                               <button th:type="button" class="btn btn-warning disabled">
-                                   <span class="glyphicon glyphicon-pencil"></span> Edit
-                               </button>
-                           </span>
-                           <span th:if="${getCurrentUser.canDelete(book)}"  >
-                               <a href="#" th:href="@{/manage/book/delete/{bookId}(bookId=${book.id})}" class="btn btn-danger" th:onclick="'return confirm(\'Are you sure, you want to delete this record?\');'">
+                               <a href="#" th:href="@{/manage/book/delete/{bookId}(bookId=${book.id})}" class="btn btn-danger" th:classappend="${!getCurrentUser.canDelete(book) ? 'disabled' : ''}" th:onclick="'return confirm(\'Are you sure, you want to delete this record?\');'">
                                    <span class="glyphicon glyphicon-remove"></span> Delete
                                </a>
-                           </span>
-                           <span th:unless="${getCurrentUser.canDelete(book)}"  >
-                               <button th:type="button" class="btn btn-danger disabled">
-                                   <span class="glyphicon glyphicon-remove"></span> Delete
-                               </button>
-                           </span>
                         </td>
                     </tr>
                 </tbody>

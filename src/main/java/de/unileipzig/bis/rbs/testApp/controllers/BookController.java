@@ -89,8 +89,7 @@ public class BookController extends AbstractController {
         if (isAdmin()) {
             Iterable<Author> allAuthors = authorRepository.findAll();
             model.addAttribute("authors", allAuthors);
-            Iterable<Role> roles = roleRepository.findAll();
-            model.addAttribute("roles", roles);
+            model.addAttribute("roles", getAllRoles());
             return "book/create";
         } else {
             setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have create rights for objects here"));
@@ -146,8 +145,7 @@ public class BookController extends AbstractController {
             model.addAttribute("book", book);
             Iterable<Author> allAuthors = authorRepository.findAll();
             model.addAttribute("authors", allAuthors);
-            Iterable<Role> roles = roleRepository.findAll();
-            model.addAttribute("roles", roles);
+            model.addAttribute("roles", getAllRoles());
             return "book/edit";
         } else {
             setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You do not have write rights for object with id: " + bookid));
@@ -182,7 +180,7 @@ public class BookController extends AbstractController {
             book.setTitle(title);
             book.setAuthor(author);
             try {
-                this.setRoleObjectsToObject(book, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
+                setRoleObjectsToObject(book, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
 
                 bookRepository.save(book);
             } catch (RoleObjectConsistencyException e) {
