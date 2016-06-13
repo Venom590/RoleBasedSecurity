@@ -38,6 +38,10 @@ public class RoleController extends AbstractController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String roles(Model model) {
+        if (!isAdmin()) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "Only the administrator can do that."));
+            return "redirect:/";
+        }
         Iterable<Role> roles = roleRepository.findAll();
         model.addAttribute("roles", roles);
         return "role/all-roles";
@@ -52,6 +56,10 @@ public class RoleController extends AbstractController {
      */
     @RequestMapping(value = "/{roleid}", method = RequestMethod.GET)
     public String role(@PathVariable String roleid, Model model) {
+        if (!isAdmin()) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "Only the administrator can do that."));
+            return "redirect:/";
+        }
         Role role = roleRepository.findOne(Long.valueOf(roleid));
         model.addAttribute("role", role);
         return "role/role";
@@ -65,6 +73,10 @@ public class RoleController extends AbstractController {
      */
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model) {
+        if (!isAdmin()) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "Only the administrator can do that."));
+            return "redirect:/";
+        }
         model.addAttribute("roles", getAllRoles());
         model.addAttribute("users", getAllUsers());
         return "role/create";
@@ -82,6 +94,10 @@ public class RoleController extends AbstractController {
     public String doCreate(@RequestParam(value = "parent_id") Long parentId,
                            @RequestParam(value = "name", required = false) String name,
                            @RequestParam(value = "users[]", required = false) Long[] userIds) {
+        if (!isAdmin()) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "Only the administrator can do that."));
+            return "redirect:/";
+        }
         Role role = new Role();
         role.setName(name);
         if (parentId != null && parentId != 0) {
@@ -107,6 +123,10 @@ public class RoleController extends AbstractController {
      */
     @RequestMapping(value = "/edit/{roleid}", method = RequestMethod.GET)
     public String edit(@PathVariable String roleid, Model model) {
+        if (!isAdmin()) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "Only the administrator can do that."));
+            return "redirect:/";
+        }
         Role role = roleRepository.findOne(Long.valueOf(roleid));
         if (role.getName().equals("admin")) {
             setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You can not edit the admin role."));
@@ -132,6 +152,10 @@ public class RoleController extends AbstractController {
                          @RequestParam(value = "parent_id", required = false) Long parentId,
                          @RequestParam(value = "name") String name,
                          @RequestParam(value = "users[]", required = false) Long[] userIds) {
+        if (!isAdmin()) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "Only the administrator can do that."));
+            return "redirect:/";
+        }
         Role role = roleRepository.findOne(Long.valueOf(roleid));
         if (role.getName().equals("admin")) {
             setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You can not edit the admin role."));
@@ -168,6 +192,10 @@ public class RoleController extends AbstractController {
      */
     @RequestMapping(value = "/delete/{roleid}", method = RequestMethod.GET)
     public String delete(@PathVariable String roleid) {
+        if (!isAdmin()) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "Only the administrator can do that."));
+            return "redirect:/";
+        }
         Role role = roleRepository.findOne(Long.valueOf(roleid));
         if (!role.getName().equals("admin")) {
             roleRepository.delete(Long.valueOf(roleid));

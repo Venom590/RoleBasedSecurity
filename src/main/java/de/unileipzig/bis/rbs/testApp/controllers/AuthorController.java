@@ -103,7 +103,7 @@ public class AuthorController extends AbstractController {
         if (isAdmin()) {
             Author author = new Author(name);
             try {
-                this.setRoleObjectsToObject(author, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
+                setRoleObjectsToObject(author, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
                 authorRepository.save(author);
             } catch (RoleObjectConsistencyException e) {
                 setHintMessage(new HintMessage(HintMessage.HintStatus.danger, e.getMessage()));

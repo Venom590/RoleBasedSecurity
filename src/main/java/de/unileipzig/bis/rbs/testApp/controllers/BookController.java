@@ -120,7 +120,6 @@ public class BookController extends AbstractController {
             Book book = new Book(isbn, title, author);
             try {
                 this.setRoleObjectsToObject(book, canReadRoleIds, canWriteRoleIds, canDeleteRoleIds);
-
                 bookRepository.save(book);
             } catch (RoleObjectConsistencyException e) {
                 setHintMessage(new HintMessage(HintMessage.HintStatus.danger, e.getMessage()));

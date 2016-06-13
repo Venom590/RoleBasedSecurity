@@ -38,7 +38,7 @@
                     </tr>
                 </tbody>
             </table>
-            <p><a href="#" th:href="@{/manage/author/create}" class="btn btn-default">Create new author</a></p>
+            <p th:if="${isAdmin}"><a href="#" th:href="@{/manage/author/create}" class="btn btn-default">Create new author</a></p>
 
             <div th:replace="fragments/footer :: footer"></div>
         </div>

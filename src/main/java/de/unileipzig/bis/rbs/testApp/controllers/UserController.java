@@ -29,6 +29,10 @@ public class UserController extends AbstractController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String users(Model model) {
+        if (!isAdmin()) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "Only the administrator can do that."));
+            return "redirect:/";
+        }
         Iterable<User> users = userRepository.findAll();
         model.addAttribute("users", users);
         return "user/all-users";
@@ -43,6 +47,10 @@ public class UserController extends AbstractController {
      */
     @RequestMapping(value = "/{userid}", method = RequestMethod.GET)
     public String user(@PathVariable String userid, Model model) {
+        if (!isAdmin()) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "Only the administrator can do that."));
+            return "redirect:/";
+        }
         User user = userRepository.findOne(Long.valueOf(userid));
         model.addAttribute("user", user);
         return "user/user";
@@ -56,8 +64,12 @@ public class UserController extends AbstractController {
      */
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model) {
-        model.addAttribute("roles", getAllRoles());
-        return "user/create";
+        if (isAdmin()) {
+            model.addAttribute("roles", getAllRoles());
+            return "user/create";
+        }
+        setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "Only the administrator can do that."));
+        return "redirect:/";
     }
 
     /**
@@ -74,6 +86,10 @@ public class UserController extends AbstractController {
                            @RequestParam(value = "password") String password,
                            @RequestParam(value = "name", required = false) String name,
                            @RequestParam(value = "roles[]", required = false) Long[] roleIds) {
+        if (!isAdmin()) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "Only the administrator can do that."));
+            return "redirect:/";
+        }
         User user = new User(username, password, name);
         Set<Role> roles = new HashSet<>();
         if (roleIds != null) {
@@ -95,6 +111,10 @@ public class UserController extends AbstractController {
      */
     @RequestMapping(value = "/edit/{userid}", method = RequestMethod.GET)
     public String edit(@PathVariable String userid, Model model) {
+        if (!isAdmin()) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "Only the administrator can do that."));
+            return "redirect:/";
+        }
         User user = userRepository.findOne(Long.valueOf(userid));
         if (user.getUsername().equals("admin")) {
             setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You can not edit the admin user."));
@@ -121,6 +141,10 @@ public class UserController extends AbstractController {
                          @RequestParam(value = "password") String password,
                          @RequestParam(value = "name", required = false) String name,
                          @RequestParam(value = "roles[]", required = false) Long[] roleIds) {
+        if (!isAdmin()) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "Only the administrator can do that."));
+            return "redirect:/";
+        }
         User user = userRepository.findOne(Long.valueOf(userid));
         if (user.getUsername().equals("admin")) {
             setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You can not edit the admin user."));
@@ -149,6 +173,10 @@ public class UserController extends AbstractController {
      */
     @RequestMapping(value = "/delete/{userid}", method = RequestMethod.GET)
     public String delete(@PathVariable String userid) {
+        if (!isAdmin()) {
+            setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "Only the administrator can do that."));
+            return "redirect:/";
+        }
         User user = userRepository.findOne(Long.valueOf(userid));
         if (user.getUsername().equals("admin")) {
             setHintMessage(new HintMessage(HintMessage.HintStatus.danger, "You can not delete the admin user."));
