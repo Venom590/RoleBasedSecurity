@@ -60,6 +60,11 @@ for the  test app, which extends 'de.unileipzig.bis.rbs.testApp.controllers.Abst
 
 ## Release Notes
 
+### v1.0 (2016-06-28)
+- Updated documentation
+- Created wiki
+- Tested the application
+
 ### v0.4 (2016-06-14)
 - Improved frontends and backends (admin not changeable, security improved)
 - Hide admin user in management
